@@ -1,18 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import { Camera, Menu, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Camera, Menu, X, ChevronLeft, ChevronRight, Instagram, Facebook, Twitter, MapPin, Mail, Phone, ArrowRight, Star, Aperture, Image as ImageIcon, Calendar } from 'lucide-react';
 
-// CSS styles without Tailwind
+// Modern Design System - 2024 Aesthetic
+const designTokens = {
+  colors: {
+    // Primary - Deep Slate/Navy for sophistication
+    primary: {
+      50: '#f8fafc',
+      100: '#f1f5f9',
+      200: '#e2e8f0',
+      300: '#cbd5e1',
+      400: '#94a3b8',
+      500: '#64748b',
+      600: '#475569',
+      700: '#334155',
+      800: '#1e293b',
+      900: '#0f172a',
+      950: '#020617',
+    },
+    // Accent - Warm coral/orange for energy
+    accent: {
+      400: '#fb7185',
+      500: '#f43f5e',
+      600: '#e11d48',
+    },
+    // Neutral
+    white: '#ffffff',
+    black: '#000000',
+  },
+  shadows: {
+    sm: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
+    md: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+    lg: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
+    xl: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
+    glow: '0 0 40px -10px rgb(228 40 81 / 0.3)',
+  },
+  borderRadius: {
+    sm: '8px',
+    md: '12px',
+    lg: '16px',
+    xl: '24px',
+    full: '9999px',
+  },
+  transitions: {
+    fast: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1)',
+    base: 'all 300ms cubic-bezier(0.4, 0, 0.2, 1)',
+    slow: 'all 500ms cubic-bezier(0.4, 0, 0.2, 1)',
+  },
+  gradients: {
+    hero: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)',
+    card: 'linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(15,23,42,0.8) 100%)',
+    glow: 'linear-gradient(135deg, #f43f5e 0%, #e11d48 100%)',
+    subtle: 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)',
+  },
+};
+
+// Modern CSS-in-JS Styles
 const styles = {
   // Layout
   container: {
-    maxWidth: '1200px',
+    maxWidth: '1280px',
     margin: '0 auto',
-    padding: '0 1rem',
+    padding: '0 1.5rem',
   },
   minHeightScreen: {
     minHeight: '100vh',
   },
-  
+
   // Flexbox
   flexBetween: {
     display: 'flex',
@@ -28,687 +82,896 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
   },
-  
-  // Text
-  text2xl: {
-    fontSize: '1.5rem',
-    fontWeight: 300,
-  },
-  text3xl: {
-    fontSize: '1.875rem',
-    fontWeight: 300,
-  },
-  text4xl: {
-    fontSize: '2.25rem',
-    fontWeight: 300,
+
+  // Typography - Modern Scale
+  textXs: {
+    fontSize: '0.75rem',
+    lineHeight: '1rem',
   },
   textSm: {
     fontSize: '0.875rem',
+    lineHeight: '1.5rem',
   },
-  textUppercase: {
-    textTransform: 'uppercase',
+  textBase: {
+    fontSize: '1rem',
+    lineHeight: '1.75rem',
   },
-  fontBold: {
-    fontWeight: 700,
+  textLg: {
+    fontSize: '1.125rem',
+    lineHeight: '1.75rem',
   },
-  fontMedium: {
-    fontWeight: 500,
+  textXl: {
+    fontSize: '1.25rem',
+    lineHeight: '2rem',
   },
-  textCenter: {
-    textAlign: 'center',
+  text2xl: {
+    fontSize: '1.5rem',
+    lineHeight: '2.25rem',
   },
-  
+  text3xl: {
+    fontSize: '1.875rem',
+    lineHeight: '2.5rem',
+  },
+  text4xl: {
+    fontSize: '2.25rem',
+    lineHeight: '3rem',
+  },
+  text5xl: {
+    fontSize: '3rem',
+    lineHeight: '1.1',
+  },
+  text6xl: {
+    fontSize: '3.75rem',
+    lineHeight: '1.1',
+  },
+  fontLight: { fontWeight: 300 },
+  fontNormal: { fontWeight: 400 },
+  fontMedium: { fontWeight: 500 },
+  fontSemibold: { fontWeight: 600 },
+  fontBold: { fontWeight: 700 },
+  textCenter: { textAlign: 'center' },
+  letterWide: { letterSpacing: '0.025em' },
+  letterWider: { letterSpacing: '0.05em' },
+
   // Colors
-  bgWhite: {
-    backgroundColor: '#ffffff',
+  textPrimary: { color: designTokens.colors.primary[900] },
+  textSecondary: { color: designTokens.colors.primary[600] },
+  textMuted: { color: designTokens.colors.primary[400] },
+  textWhite: { color: designTokens.colors.white },
+  textAccent: { color: designTokens.colors.accent[500] },
+
+  // Spacing - Generous modern whitespace
+  spacing: {
+    xs: '0.5rem',
+    sm: '1rem',
+    md: '1.5rem',
+    lg: '2rem',
+    xl: '3rem',
+    '2xl': '4rem',
+    '3xl': '6rem',
+    '4xl': '8rem',
   },
-  bgGray50: {
-    backgroundColor: '#f9fafb',
-  },
-  bgGray100: {
-    backgroundColor: '#f3f4f6',
-  },
-  bgGray900: {
-    backgroundColor: '#111827',
-  },
-  textGray500: {
-    color: '#6b7280',
-  },
-  textGray600: {
-    color: '#4b5563',
-  },
-  textGray700: {
-    color: '#374151',
-  },
-  textGray900: {
-    color: '#111827',
-  },
-  textWhite: {
-    color: '#ffffff',
-  },
-  
-  // Spacing
-  my2: {
-    marginTop: '0.5rem',
-    marginBottom: '0.5rem',
-  },
-  my4: {
-    marginTop: '1rem',
-    marginBottom: '1rem',
-  },
-  my8: {
-    marginTop: '2rem',
-    marginBottom: '2rem',
-  },
-  my12: {
-    marginTop: '3rem',
-    marginBottom: '3rem',
-  },
-  my16: {
-    marginTop: '4rem',
-    marginBottom: '4rem',
-  },
-  mb2: {
-    marginBottom: '0.5rem',
-  },
-  mb4: {
-    marginBottom: '1rem',
-  },
-  mb8: {
-    marginBottom: '2rem',
-  },
-  mb12: {
-    marginBottom: '3rem',
-  },
-  mt2: {
-    marginTop: '0.5rem',
-  },
-  mt4: {
-    marginTop: '1rem',
-  },
-  p2: {
-    padding: '0.5rem',
-  },
-  p4: {
-    padding: '1rem',
-  },
-  p6: {
-    padding: '1.5rem',
-  },
-  p8: {
-    padding: '2rem',
-  },
-  py2: {
-    paddingTop: '0.5rem',
-    paddingBottom: '0.5rem',
-  },
-  py4: {
-    paddingTop: '1rem',
-    paddingBottom: '1rem',
-  },
-  py8: {
-    paddingTop: '2rem',
-    paddingBottom: '2rem',
-  },
-  py12: {
-    paddingTop: '3rem',
-    paddingBottom: '3rem',
-  },
-  py16: {
-    paddingTop: '4rem',
-    paddingBottom: '4rem',
-  },
-  px2: {
-    paddingLeft: '0.5rem',
-    paddingRight: '0.5rem',
-  },
-  px4: {
-    paddingLeft: '1rem',
-    paddingRight: '1rem',
-  },
-  px6: {
-    paddingLeft: '1.5rem',
-    paddingRight: '1.5rem',
-  },
-  px8: {
-    paddingLeft: '2rem',
-    paddingRight: '2rem',
-  },
-  
-  // Border and Shadow
-  shadow: {
-    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
-  },
-  shadowMd: {
-    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-  },
-  borderGray100: {
-    border: '1px solid #f3f4f6',
-  },
-  borderGray300: {
-    border: '1px solid #d1d5db',
-  },
-  rounded: {
-    borderRadius: '0.25rem',
-  },
-  roundedFull: {
-    borderRadius: '9999px',
-  },
-  
-  // Components
+
+  // Modern Components
   button: {
-    padding: '0.75rem 1.5rem',
-    borderRadius: '0.25rem',
+    padding: '0.875rem 2rem',
+    borderRadius: designTokens.borderRadius.full,
     fontWeight: 500,
     cursor: 'pointer',
     border: 'none',
-    transition: 'background-color 0.3s',
+    transition: designTokens.transitions.base,
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.5rem',
+    fontSize: '0.9375rem',
+    letterSpacing: '0.01em',
   },
   buttonPrimary: {
-    backgroundColor: '#111827',
-    color: '#ffffff',
+    background: designTokens.gradients.glow,
+    color: designTokens.colors.white,
+    boxShadow: designTokens.shadows.md,
   },
   buttonSecondary: {
-    backgroundColor: '#f3f4f6',
-    color: '#111827',
+    backgroundColor: designTokens.colors.white,
+    color: designTokens.colors.primary[900],
+    border: `1px solid ${designTokens.colors.primary[200]}`,
+    boxShadow: designTokens.shadows.sm,
   },
-  form: {
-    width: '100%',
+  buttonGhost: {
+    backgroundColor: 'transparent',
+    color: designTokens.colors.primary[700],
   },
+
+  // Modern Card
+  card: {
+    backgroundColor: designTokens.colors.white,
+    borderRadius: designTokens.borderRadius.lg,
+    boxShadow: designTokens.shadows.md,
+    transition: designTokens.transitions.base,
+    overflow: 'hidden',
+  },
+  cardHover: {
+    boxShadow: designTokens.shadows.xl,
+  },
+
+  // Glass Card (Glassmorphism)
+  glassCard: {
+    background: 'rgba(255, 255, 255, 0.7)',
+    backdropFilter: 'blur(12px)',
+    borderRadius: designTokens.borderRadius.lg,
+    border: '1px solid rgba(255, 255, 255, 0.3)',
+    boxShadow: '0 8px 32px 0 rgba(15, 23, 42, 0.08)',
+  },
+
+  // Modern Form
   formInput: {
     width: '100%',
-    padding: '0.75rem',
-    border: '1px solid #d1d5db',
-    marginBottom: '1rem',
-    outlineColor: '#9ca3af',
+    padding: '0.875rem 1rem',
+    border: `1px solid ${designTokens.colors.primary[200]}`,
+    borderRadius: designTokens.borderRadius.md,
+    fontSize: '0.9375rem',
+    outline: 'none',
+    transition: designTokens.transitions.base,
+    backgroundColor: designTokens.colors.white,
+    color: designTokens.colors.primary[900],
   },
-  
-  // Header and Navigation
+  formInputFocus: {
+    borderColor: designTokens.colors.accent[500],
+    boxShadow: `0 0 0 3px ${designTokens.colors.accent[400]}20`,
+  },
+
+  // Navigation
   header: {
-    backgroundColor: '#ffffff',
-    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
-    padding: '1rem 0',
-  },
-  nav: {
-    display: 'flex',
-    gap: '2rem',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    backdropFilter: 'blur(20px)',
+    borderBottom: `1px solid ${designTokens.colors.primary[100]}`,
+    padding: '0.75rem 0',
+    position: 'sticky',
+    top: 0,
+    zIndex: 50,
   },
   navItem: {
-    padding: '0.5rem',
+    padding: '0.625rem 1.25rem',
     cursor: 'pointer',
-    fontSize: '0.875rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    color: '#6b7280',
-    fontWeight: 400,
-    transition: 'color 0.3s',
+    fontSize: '0.9375rem',
+    fontWeight: 500,
+    color: designTokens.colors.primary[500],
+    borderRadius: designTokens.borderRadius.full,
+    transition: designTokens.transitions.base,
+    border: 'none',
+    background: 'transparent',
+    letterSpacing: '0.01em',
   },
   navItemActive: {
-    color: '#111827',
-    fontWeight: 500,
+    color: designTokens.colors.accent[500],
+    backgroundColor: `${designTokens.colors.accent[500]}15`,
+    fontWeight: 600,
   },
   mobileNav: {
     position: 'fixed',
     top: '64px',
     left: 0,
     right: 0,
-    backgroundColor: '#ffffff',
-    borderTop: '1px solid #f3f4f6',
+    backgroundColor: 'rgba(255, 255, 255, 0.98)',
+    backdropFilter: 'blur(20px)',
+    borderTop: `1px solid ${designTokens.colors.primary[100]}`,
     padding: '1rem',
     zIndex: 50,
   },
-  mobileNavItem: {
-    padding: '0.75rem 0',
-    fontSize: '0.875rem',
-    textTransform: 'uppercase',
-    letterSpacing: '0.05em',
-    cursor: 'pointer',
-  },
-  
-  // Grid
-  grid: {
-    display: 'grid',
-    gap: '2rem',
-  },
-  gridCols1: {
-    gridTemplateColumns: '1fr',
-  },
-  gridCols2: {
-    gridTemplateColumns: 'repeat(2, 1fr)',
-  },
-  gridCols3: {
-    gridTemplateColumns: 'repeat(3, 1fr)',
-  },
-  
-  // Image
-  objectCover: {
-    objectFit: 'cover',
-    width: '100%',
-    height: '100%',
-  },
-  
-  // Hero Section
+
+  // Hero - Modern gradient background
   hero: {
     position: 'relative',
-    height: '80vh',
+    minHeight: '90vh',
     overflow: 'hidden',
+    background: designTokens.gradients.hero,
   },
-  heroOverlay: {
-    position: 'absolute',
-    inset: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+  heroContent: {
+    position: 'relative',
+    zIndex: 2,
     display: 'flex',
-    alignItems: 'center',
+    flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
     textAlign: 'center',
+    minHeight: '90vh',
+    padding: '4rem 1.5rem',
   },
-  
-  // Portfolio Item
+
+  // Portfolio Grid - Masonry-style
+  portfolioGrid: {
+    display: 'grid',
+    gap: '1.5rem',
+  },
   portfolioItem: {
     position: 'relative',
     overflow: 'hidden',
     cursor: 'pointer',
-    height: '250px',
+    borderRadius: designTokens.borderRadius.lg,
+    aspectRatio: '4/3',
   },
-  portfolioOverlay: {
-    position: 'absolute',
-    inset: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    opacity: 0,
-    transition: 'opacity 0.3s',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+
+  // Testimonial Card
+  testimonialCard: {
+    padding: '2rem',
+    backgroundColor: designTokens.colors.white,
+    borderRadius: designTokens.borderRadius.lg,
+    boxShadow: designTokens.shadows.md,
   },
-  
+
+  // Footer
+  footer: {
+    backgroundColor: designTokens.colors.primary[950],
+    color: designTokens.colors.primary[300],
+    padding: '4rem 0 2rem',
+  },
+
   // Lightbox
   lightbox: {
     position: 'fixed',
     inset: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    backgroundColor: 'rgba(2, 6, 23, 0.98)',
+    backdropFilter: 'blur(8px)',
     zIndex: 100,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  lightboxControls: {
-    position: 'absolute',
-    color: '#ffffff',
-    cursor: 'pointer',
-    zIndex: 101,
+
+  // Service Card
+  serviceCard: {
+    padding: '2rem',
+    backgroundColor: designTokens.colors.white,
+    borderRadius: designTokens.borderRadius.lg,
+    boxShadow: designTokens.shadows.md,
+    transition: designTokens.transitions.base,
+    position: 'relative',
+    overflow: 'hidden',
   },
-  
-  // Testimonial
-  testimonial: {
-    backgroundColor: '#ffffff',
-    padding: '1.5rem',
-    boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.1)',
+
+  // Badge
+  badge: {
+    padding: '0.375rem 0.875rem',
+    borderRadius: designTokens.borderRadius.full,
+    fontSize: '0.75rem',
+    fontWeight: 600,
+    textTransform: 'uppercase',
+    letterSpacing: '0.05em',
   },
-  
-  // Footer
-  footer: {
-    backgroundColor: '#111827',
-    color: '#ffffff',
-    padding: '3rem 0',
+
+  // Stats Counter
+  statNumber: {
+    fontSize: '3rem',
+    fontWeight: 700,
+    color: designTokens.colors.accent[500],
+    lineHeight: 1,
   },
-  footerLink: {
-    color: '#9ca3af',
-    transition: 'color 0.3s',
-  },
-  
-  // Responsive (to be applied with media queries in the component)
-  hidden: {
-    display: 'none',
-  },
-  block: {
-    display: 'block',
-  },
-  flex: {
-    display: 'flex',
+
+  // Section divider
+  sectionDivider: {
+    width: '60px',
+    height: '4px',
+    background: designTokens.gradients.glow,
+    borderRadius: '2px',
+    margin: '1rem 0 2rem',
   },
 };
 
-// Media query function
+// Media query hook
 const useMediaQuery = (query) => {
   const [matches, setMatches] = useState(false);
 
   useEffect(() => {
     const media = window.matchMedia(query);
-    if (media.matches !== matches) {
-      setMatches(media.matches);
-    }
-    
+    if (media.matches !== matches) setMatches(media.matches);
     const listener = () => setMatches(media.matches);
     media.addEventListener('change', listener);
-    
     return () => media.removeEventListener('change', listener);
   }, [matches, query]);
 
   return matches;
 };
 
-// Safe window width function
-const getWindowWidth = () => {
-  if (typeof window !== 'undefined') {
-    return window.innerWidth;
-  }
-  return 1200; // Default fallback
-};
-
 const PhotographyWebsite = () => {
   const [activeSection, setActiveSection] = useState('home');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(null);
-  
-  // Enhanced responsive breakpoints
+  const [hoveredService, setHoveredService] = useState(null);
+  const [portfolioFilter, setPortfolioFilter] = useState('all');
+
   const isMobile = useMediaQuery('(max-width: 639px)');
   const isTablet = useMediaQuery('(min-width: 640px) and (max-width: 767px)');
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const isLargeDesktop = useMediaQuery('(min-width: 1024px)');
-  
-  // Sample photography portfolio data
+
   const portfolioCategories = [
-    {
-      id: 'nature',
-      title: 'Nature',
-      description: 'Capturing the beauty of landscapes and wildlife',
-      featured: true
-    },
-    {
-      id: 'portrait',
-      title: 'Portraits',
-      description: 'Expressive human portraits in natural settings',
-      featured: true
-    },
-    {
-      id: 'architecture',
-      title: 'Architecture',
-      description: 'Modern and classical architectural photography',
-      featured: false
-    },
-    {
-      id: 'street',
-      title: 'Street',
-      description: 'Authentic moments from urban environments',
-      featured: true
-    }
+    { id: 'nature', title: 'Nature', description: 'Capturing the raw beauty of landscapes and wildlife', featured: true },
+    { id: 'portrait', title: 'Portraits', description: 'Expressive human portraits in natural settings', featured: true },
+    { id: 'architecture', title: 'Architecture', description: 'Modern and classical architectural photography', featured: false },
+    { id: 'street', title: 'Street', description: 'Authentic moments from urban environments', featured: true },
+    { id: 'wedding', title: 'Weddings', description: 'Timeless moments from your special day', featured: false },
+    { id: 'commercial', title: 'Commercial', description: 'Professional product and brand imagery', featured: false },
   ];
-  
-  // Sample gallery images (using placeholders)
+
   const galleryImages = [
-    { src: '/api/placeholder/800/600', alt: 'Mountain landscape at sunset', category: 'nature' },
-    { src: '/api/placeholder/800/600', alt: 'Portrait of woman in natural light', category: 'portrait' },
-    { src: '/api/placeholder/800/600', alt: 'Modern skyscraper from below', category: 'architecture' },
-    { src: '/api/placeholder/800/600', alt: 'Street scene in rain', category: 'street' },
-    { src: '/api/placeholder/800/600', alt: 'Ocean waves at dawn', category: 'nature' },
-    { src: '/api/placeholder/800/600', alt: 'Elderly man portrait', category: 'portrait' },
-    { src: '/api/placeholder/800/600', alt: 'Historical building facade', category: 'architecture' },
-    { src: '/api/placeholder/800/600', alt: 'City market scene', category: 'street' }
+    // Nature
+    { src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80', alt: 'Mountain landscape at golden hour', category: 'nature' },
+    { src: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=800&q=80', alt: 'Waterfall in lush forest', category: 'nature' },
+    { src: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&q=80', alt: 'Sunrise over mountains', category: 'nature' },
+    { src: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=800&q=80', alt: 'Misty mountain valley', category: 'nature' },
+    { src: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=800&q=80', alt: 'Lake reflection at sunset', category: 'nature' },
+    { src: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80', alt: 'Sunlight through forest', category: 'nature' },
+
+    // Portrait
+    { src: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80', alt: 'Intimate portrait in soft light', category: 'portrait' },
+    { src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80', alt: 'Professional headshot', category: 'portrait' },
+    { src: 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=800&q=80', alt: 'Fashion portrait', category: 'portrait' },
+    { src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80', alt: 'Character portrait', category: 'portrait' },
+    { src: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=800&q=80', alt: 'Natural light portrait', category: 'portrait' },
+    { src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80', alt: 'Studio portrait', category: 'portrait' },
+
+    // Architecture
+    { src: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80', alt: 'Modern architectural masterpiece', category: 'architecture' },
+    { src: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?w=800&q=80', alt: 'Historic building details', category: 'architecture' },
+    { src: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=800&q=80', alt: 'Contemporary glass building', category: 'architecture' },
+    { src: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?w=800&q=80', alt: 'Abstract architecture', category: 'architecture' },
+    { src: 'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?w=800&q=80', alt: 'Modern building facade', category: 'architecture' },
+    { src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80', alt: 'Interior architecture', category: 'architecture' },
+
+    // Street
+    { src: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=800&q=80', alt: 'Urban street scene', category: 'street' },
+    { src: 'https://images.unsplash.com/photo-1517732306149-e8f829eb588a?w=800&q=80', alt: 'City market vibrancy', category: 'street' },
+    { src: 'https://images.unsplash.com/photo-1476973422084-e0fa66c5baf2?w=800&q=80', alt: 'Rainy night in Tokyo', category: 'street' },
+    { src: 'https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=800&q=80', alt: 'Busy city intersection', category: 'street' },
+    { src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80', alt: 'Urban skyline', category: 'street' },
+    { src: 'https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?w=800&q=80', alt: 'New York City street', category: 'street' },
+
+    // Wedding
+    { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=80', alt: 'Bride and groom embrace', category: 'wedding' },
+    { src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=80', alt: 'Wedding ceremony moment', category: 'wedding' },
+    { src: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=80', alt: 'Wedding rings detail', category: 'wedding' },
+    { src: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=80', alt: 'Wedding bouquet close-up', category: 'wedding' },
+    { src: 'https://images.unsplash.com/photo-1460978812857-470ed1c77af0?w=800&q=80', alt: 'First dance moment', category: 'wedding' },
+    { src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&q=80', alt: 'Wedding venue decoration', category: 'wedding' },
+
+    // Commercial
+    { src: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=80', alt: 'Product photography', category: 'commercial' },
+    { src: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=800&q=80', alt: 'Headphones product shot', category: 'commercial' },
+    { src: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80', alt: 'Red Nike shoe product', category: 'commercial' },
+    { src: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&q=80', alt: 'Polaroid camera product', category: 'commercial' },
+    { src: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=800&q=80', alt: 'Sunglasses product', category: 'commercial' },
+    { src: 'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800&q=80', alt: 'Luxury watch product', category: 'commercial' },
   ];
-  
-  // Testimonials
+
   const testimonials = [
     {
       name: 'Sarah Johnson',
-      role: 'Marketing Director',
-      text: 'The photographs captured for our campaign exceeded our expectations. Professional, timely, and incredibly creative.'
+      role: 'Creative Director',
+      text: 'Working with this photographer transformed our entire brand identity. The attention to detail and artistic vision exceeded all expectations.',
+      rating: 5,
     },
     {
       name: 'Michael Chen',
-      role: 'Magazine Editor',
-      text: 'We\'ve worked together on multiple shoots and the quality is consistently outstanding. A true professional with an artistic eye.'
+      role: 'Editor-in-Chief',
+      text: 'A true professional who brings both technical excellence and creative artistry. Every shoot delivers consistently stunning results.',
+      rating: 5,
     },
     {
       name: 'Elena Rodriguez',
-      role: 'Wedding Client',
-      text: 'Our wedding photos are absolute treasures. Every important moment was captured beautifully and naturally.'
-    }
+      role: 'Bride',
+      text: 'Our wedding photos are absolute treasures. Every emotion, every moment was captured with such beauty and authenticity.',
+      rating: 5,
+    },
   ];
-  
-  // Function to handle image navigation in the lightbox
+
+  const services = [
+    {
+      icon: Aperture,
+      title: 'Portrait Photography',
+      description: 'Professional portraits that capture personality and essence. Perfect for individuals, couples, and families.',
+      price: 'From $350',
+      features: ['Studio or on-location', 'Professional retouching', 'Digital gallery included'],
+    },
+    {
+      icon: Calendar,
+      title: 'Wedding Photography',
+      description: 'Comprehensive coverage of your special day with artistic storytelling and candid moments.',
+      price: 'From $2,500',
+      features: ['Full day coverage', 'Second photographer', 'Luxury album included'],
+    },
+    {
+      icon: ImageIcon,
+      title: 'Commercial Photography',
+      description: 'High-impact product and brand imagery that elevates your marketing and drives engagement.',
+      price: 'From $800',
+      features: ['Product styling', 'Multiple angles', 'Commercial licensing'],
+    },
+    {
+      icon: Camera,
+      title: 'Event Coverage',
+      description: 'Documentary-style photography for corporate events, conferences, and special occasions.',
+      price: 'From $500',
+      features: ['Real-time editing', 'Quick turnaround', 'Event highlights'],
+    },
+    {
+      icon: Star,
+      title: 'Fine Art Prints',
+      description: 'Limited edition artistic prints for homes, offices, and galleries. Museum-quality materials.',
+      price: 'From $250',
+      features: ['Archival quality', 'Certificate of authenticity', 'Custom framing'],
+    },
+    {
+      icon: ArrowRight,
+      title: 'Photo Editing',
+      description: 'Professional retouching and editing services to enhance your existing photographs.',
+      price: '$75/hr',
+      features: ['Color correction', 'Advanced retouching', 'Format conversion'],
+    },
+  ];
+
+  const getFilteredImages = () => galleryImages.filter((image) => portfolioFilter === 'all' || image.category === portfolioFilter);
+
   const navigateGallery = (direction) => {
+    const filtered = getFilteredImages();
     if (direction === 'next') {
-      setCurrentImageIndex((prev) => 
-        prev === galleryImages.length - 1 ? 0 : prev + 1
-      );
+      setCurrentImageIndex((prev) => (prev === filtered.length - 1 ? 0 : prev + 1));
     } else {
-      setCurrentImageIndex((prev) => 
-        prev === 0 ? galleryImages.length - 1 : prev - 1
-      );
+      setCurrentImageIndex((prev) => (prev === 0 ? filtered.length - 1 : prev - 1));
     }
   };
-  
-  // Close mobile menu when a section is selected
+
   useEffect(() => {
     setMobileMenuOpen(false);
+    setPortfolioFilter('all');
   }, [activeSection]);
-  
-  // Handle orientation changes and window resizes
+
+  // Close lightbox on escape key
   useEffect(() => {
-    const handleResize = () => {
-      // Force re-render on orientation change
-      setMobileMenuOpen(false);
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setCurrentImageIndex(null);
+      if (currentImageIndex !== null) {
+        if (e.key === 'ArrowRight') navigateGallery('next');
+        if (e.key === 'ArrowLeft') navigateGallery('prev');
+      }
     };
-    
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-  
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentImageIndex]);
+
+  const navItems = ['home', 'portfolio', 'about', 'services', 'contact'];
+
   return (
-    <div style={{ ...styles.bgGray50, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-      {/* Header/Navigation */}
+    <div style={{ fontFamily: 'Inter, system-ui, -apple-system, sans-serif', backgroundColor: designTokens.colors.primary[50] }}>
+      {/* Modern Header with Glass Effect */}
       <header style={styles.header}>
         <div style={{ ...styles.container, ...styles.flexBetween }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Camera style={{ width: '2rem', height: '2rem', color: '#111827' }} />
-            <span style={styles.text2xl}>LENS<span style={styles.fontBold}>CRAFT</span></span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: designTokens.borderRadius.md,
+              background: designTokens.gradients.glow,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+              <Camera style={{ width: '22px', height: '22px', color: designTokens.colors.white }} />
+            </div>
+            <span style={{ ...styles.textXl, ...styles.fontSemibold, color: designTokens.colors.primary[900] }}>
+              Lens<span style={{ color: designTokens.colors.accent[500] }}>Craft</span>
+            </span>
           </div>
-          
+
           {/* Desktop Navigation */}
-          <nav style={{ ...styles.nav, display: isDesktop ? 'flex' : 'none' }}>
-            {['home', 'portfolio', 'about', 'services', 'contact'].map(section => (
+          <nav style={{ ...styles.flexCenter, gap: '0.5rem', display: isDesktop ? 'flex' : 'none' }}>
+            {navItems.map((section) => (
               <button
                 key={section}
                 onClick={() => setActiveSection(section)}
                 style={{
                   ...styles.navItem,
-                  ...(activeSection === section ? styles.navItemActive : {})
+                  ...(activeSection === section ? styles.navItemActive : {}),
+                }}
+                onMouseEnter={(e) => {
+                  if (activeSection !== section) {
+                    e.currentTarget.style.backgroundColor = designTokens.colors.primary[100];
+                    e.currentTarget.style.color = designTokens.colors.primary[800];
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (activeSection !== section) {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = designTokens.colors.primary[500];
+                  }
                 }}
               >
-                {section}
+                {section.charAt(0).toUpperCase() + section.slice(1)}
               </button>
             ))}
+            <div style={{ width: '1px', height: '24px', backgroundColor: designTokens.colors.primary[200], margin: '0 0.5rem' }} />
+            <button
+              style={{
+                ...styles.button,
+                ...styles.buttonPrimary,
+                padding: '0.625rem 1.5rem',
+              }}
+              onClick={() => setActiveSection('contact')}
+            >
+              Book Now
+            </button>
           </nav>
-          
+
           {/* Mobile Menu Button */}
-          <button 
-            style={{ background: 'none', border: 'none', padding: '0.5rem', cursor: 'pointer', display: isDesktop ? 'none' : 'block' }}
+          <button
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.5rem',
+              cursor: 'pointer',
+              display: isDesktop ? 'none' : 'block',
+              borderRadius: designTokens.borderRadius.md,
+            }}
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X /> : <Menu />}
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
-        
+
         {/* Mobile Navigation */}
         {mobileMenuOpen && !isDesktop && (
           <div style={styles.mobileNav}>
-            <div style={{ ...styles.container, ...styles.flexColumn }}>
-              {['home', 'portfolio', 'about', 'services', 'contact'].map(section => (
+            <div style={{ ...styles.container, ...styles.flexColumn, gap: '0.25rem' }}>
+              {navItems.map((section) => (
                 <button
                   key={section}
                   onClick={() => setActiveSection(section)}
                   style={{
-                    ...styles.mobileNavItem,
+                    padding: '0.75rem 1rem',
+                    fontSize: '1rem',
+                    fontWeight: activeSection === section ? 600 : 500,
+                    textAlign: 'left',
                     background: 'none',
                     border: 'none',
-                    textAlign: 'left',
-                    color: activeSection === section ? '#111827' : '#6b7280',
-                    fontWeight: activeSection === section ? 500 : 400,
+                    borderRadius: designTokens.borderRadius.md,
+                    cursor: 'pointer',
+                    color: activeSection === section ? designTokens.colors.accent[500] : designTokens.colors.primary[600],
+                    backgroundColor: activeSection === section ? `${designTokens.colors.accent[500]}12` : 'transparent',
+                    transition: designTokens.transitions.base,
                   }}
                 >
-                  {section}
+                  {section.charAt(0).toUpperCase() + section.slice(1)}
                 </button>
               ))}
+              <div style={{ height: '1px', backgroundColor: designTokens.colors.primary[100], margin: '0.5rem 0' }} />
+              <button
+                style={{
+                  ...styles.button,
+                  ...styles.buttonPrimary,
+                  marginTop: '0.25rem',
+                  justifyContent: 'center',
+                }}
+                onClick={() => setActiveSection('contact')}
+              >
+                Book Now
+              </button>
             </div>
           </div>
         )}
       </header>
-      
-      {/* Main Content Area */}
+
       <main>
-        {/* Home Section with Hero Image */}
+        {/* Home Section - Modern Hero */}
         {activeSection === 'home' && (
           <section>
-            <div style={{
-              ...styles.hero,
-              height: isMobile ? '60vh' : '80vh',  // Shorter height on mobile
-            }}>
-              <img 
-                        src={require('../src/pic.png')}  
-                alt="Beautiful landscape photograph" 
-                style={styles.objectCover}
-              />
-              <div style={styles.heroOverlay}>
-                <div style={{ padding: '0 1rem', maxWidth: '100%' }}>
-                  <h1 style={{ 
-                    ...styles.text4xl, 
-                    ...styles.textWhite, 
-                    marginBottom: '1rem',
-                    fontSize: isMobile ? '1.75rem' : (isDesktop ? '3.75rem' : '2.25rem')
+            {/* Hero with Gradient Background */}
+            <div style={styles.hero}>
+              {/* Background Pattern */}
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                opacity: 0.03,
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+              }} />
+
+              <div style={styles.heroContent}>
+                <div style={{ maxWidth: '900px' }}>
+                  {/* Badge */}
+                  <div style={{
+                    ...styles.badge,
+                    backgroundColor: `${designTokens.colors.accent[500]}20`,
+                    color: designTokens.colors.accent[400],
+                    display: 'inline-block',
+                    marginBottom: '1.5rem',
                   }}>
-                    CAPTURING <span style={styles.fontBold}>MOMENTS</span>
+                    Professional Photography
+                  </div>
+
+                  <h1 style={{
+                    ...styles.textWhite,
+                    ...styles.fontBold,
+                    fontSize: isMobile ? '2.5rem' : isDesktop ? '4.5rem' : '3rem',
+                    lineHeight: 1.1,
+                    marginBottom: '1.5rem',
+                    letterSpacing: '-0.02em',
+                  }}>
+                    Capturing Moments,{' '}
+                    <span style={{ color: designTokens.colors.accent[400] }}>Creating Art</span>
                   </h1>
-                  <p style={{ 
-                    color: '#f3f4f6', 
-                    fontSize: isMobile ? '1rem' : (isDesktop ? '1.25rem' : '1.125rem'),
-                    maxWidth: '36rem',
-                    margin: '0 auto 2rem auto'
+
+                  <p style={{
+                    color: designTokens.colors.primary[300],
+                    fontSize: isMobile ? '1.125rem' : '1.25rem',
+                    lineHeight: '1.8',
+                    maxWidth: '600px',
+                    margin: '0 auto 2.5rem',
+                    letterSpacing: '0.01em',
                   }}>
-                    Professional photography that tells your unique story through a creative lens
+                    Award-winning photography that tells your unique story through a creative lens. Let's create something beautiful together.
                   </p>
-                  <button 
-                    onClick={() => setActiveSection('portfolio')}
-                    style={{
-                      ...styles.button,
-                      backgroundColor: '#ffffff',
-                      color: '#111827',
-                      padding: isMobile ? '0.5rem 1.25rem' : '0.75rem 1.5rem', // Smaller on mobile
-                    }}
-                  >
-                    View Portfolio
-                  </button>
+
+                  <div style={{ ...styles.flexCenter, gap: '1rem', flexWrap: 'wrap' }}>
+                    <button
+                      onClick={() => setActiveSection('portfolio')}
+                      style={{ ...styles.button, ...styles.buttonPrimary }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = designTokens.shadows.glow;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = designTokens.shadows.md;
+                      }}
+                    >
+                      View Portfolio
+                      <ArrowRight size={18} />
+                    </button>
+                    <button
+                      onClick={() => setActiveSection('contact')}
+                      style={{
+                        ...styles.button,
+                        backgroundColor: 'transparent',
+                        color: designTokens.colors.white,
+                        border: `1px solid ${designTokens.colors.primary[400]}`,
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                      }}
+                    >
+                      Get in Touch
+                    </button>
+                  </div>
+                </div>
+
+                {/* Stats Bar */}
+                <div style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  background: 'rgba(255, 255, 255, 0.05)',
+                  backdropFilter: 'blur(8px)',
+                  borderTop: '1px solid rgba(255,255,255,0.1)',
+                  padding: isMobile ? '1.5rem' : '2rem',
+                }}>
+                  <div style={{
+                    ...styles.container,
+                    display: 'flex',
+                    justifyContent: isMobile ? 'space-between' : 'center',
+                    gap: isMobile ? '0' : '4rem',
+                  }}>
+                    {[
+                      { value: '15+', label: 'Years' },
+                      { value: '500+', label: 'Clients' },
+                      { value: '20K+', label: 'Photos' },
+                      { value: '50+', label: 'Awards' },
+                    ].map((stat, idx) => (
+                      <div key={idx} style={{ textAlign: 'center' }}>
+                        <div style={{ ...styles.textWhite, ...styles.fontBold, fontSize: isMobile ? '1.5rem' : '2rem' }}>{stat.value}</div>
+                        <div style={{ color: designTokens.colors.primary[400], fontSize: isMobile ? '0.75rem' : '0.875rem' }}>{stat.label}</div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-            
-            {/* Featured Categories */}
-            <div style={{ 
-              ...styles.container, 
-              paddingTop: isMobile ? '2.5rem' : '4rem',
-              paddingBottom: isMobile ? '2.5rem' : '4rem',
+
+            {/* Featured Work Section */}
+            <div style={{
+              paddingTop: isMobile ? '4rem' : '6rem',
+              paddingBottom: isMobile ? '4rem' : '6rem',
+              backgroundColor: designTokens.colors.primary[50],
             }}>
-              <h2 style={{ 
-                ...styles.text3xl, 
-                ...styles.textCenter, 
-                marginBottom: isMobile ? '2rem' : '3rem',
-                fontSize: isMobile ? '1.5rem' : '1.875rem'
-              }}>
-                Featured <span style={styles.fontBold}>Work</span>
-              </h2>
-              <div style={{ 
-                ...styles.grid, 
-                gridTemplateColumns: isDesktop ? 'repeat(3, 1fr)' : '1fr',
-                gap: isMobile ? '1.5rem' : '2rem'
-              }}>
-                {portfolioCategories.filter(cat => cat.featured).map(category => (
-                  <div 
-                    key={category.id}
-                    style={{
-                      ...styles.portfolioItem,
-                      height: isMobile ? '200px' : '250px'
-                    }}
-                    onClick={() => setActiveSection('portfolio')}
-                  >
-                    <img 
-                             src={require('../src/pic.png')} 
-                      alt={category.title} 
+              <div style={styles.container}>
+                <div style={{ textAlign: 'center', marginBottom: isMobile ? '2.5rem' : '3.5rem' }}>
+                  <span style={{
+                    ...styles.badge,
+                    backgroundColor: `${designTokens.colors.accent[500]}15`,
+                    color: designTokens.colors.accent[500],
+                    display: 'inline-block',
+                    marginBottom: '1rem',
+                  }}>
+                    Portfolio
+                  </span>
+                  <h2 style={{
+                    ...styles.text3xl,
+                    ...styles.fontBold,
+                    color: designTokens.colors.primary[900],
+                    marginBottom: '1rem',
+                    fontSize: isMobile ? '1.75rem' : '2.25rem',
+                  }}>
+                    Featured Work
+                  </h2>
+                  <p style={{ color: designTokens.colors.primary[600], maxWidth: '500px', margin: '0 auto' }}>
+                    A curated selection of my best work across different genres
+                  </p>
+                </div>
+
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: isDesktop ? 'repeat(3, 1fr)' : '1fr',
+                  gap: '1.5rem',
+                }}>
+                  {portfolioCategories.filter((cat) => cat.featured).map((category, idx) => (
+                    <div
+                      key={category.id}
                       style={{
-                        ...styles.objectCover,
-                        transition: 'transform 0.5s',
+                        ...styles.portfolioItem,
+                        height: isMobile ? '280px' : '320px',
                       }}
-                      onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-                      onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                    />
-                    <div 
-                      style={{
-                        ...styles.portfolioOverlay,
-                        opacity: isMobile ? 0.3 : 0, // Always slightly visible on mobile
+                      onClick={() => setActiveSection('portfolio')}
+                      onMouseEnter={(e) => {
+                        const img = e.currentTarget.querySelector('img');
+                        const overlay = e.currentTarget.querySelector('.overlay');
+                        if (img) img.style.transform = 'scale(1.08)';
+                        if (overlay) overlay.style.opacity = '1';
                       }}
-                      onMouseOver={(e) => e.currentTarget.style.opacity = 1}
-                      onMouseOut={(e) => e.currentTarget.style.opacity = isMobile ? 0.3 : 0}
+                      onMouseLeave={(e) => {
+                        const img = e.currentTarget.querySelector('img');
+                        const overlay = e.currentTarget.querySelector('.overlay');
+                        if (img) img.style.transform = 'scale(1)';
+                        if (overlay) overlay.style.opacity = '0';
+                      }}
                     >
-                      <div style={styles.textCenter}>
-                        <h3 style={{ 
-                          color: 'white', 
-                          fontSize: isMobile ? '1.125rem' : '1.25rem', 
-                          fontWeight: 500 
-                        }}>
+                      <img
+                        src={category.id === 'nature' ? 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80' :
+                             category.id === 'portrait' ? 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=800&q=80' :
+                             category.id === 'street' ? 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80' :
+                             'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80'}
+                        alt={category.title}
+                        loading="lazy"
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover',
+                          transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                        }}
+                      />
+                      <div
+                        className="overlay"
+                        style={{
+                          position: 'absolute',
+                          inset: 0,
+                          background: designTokens.gradients.card,
+                          opacity: isMobile ? 1 : 0,
+                          transition: 'opacity 0.4s ease',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'flex-end',
+                          padding: '1.5rem',
+                        }}
+                      >
+                        <h3 style={{ color: designTokens.colors.white, fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.5rem' }}>
                           {category.title}
                         </h3>
-                        <p style={{ 
-                          color: '#e5e7eb', 
-                          fontSize: '0.875rem', 
-                          marginTop: '0.5rem',
-                          opacity: isMobile ? 1 : 0,
-                          transition: 'opacity 0.3s',
-                        }}
-                        onMouseOver={(e) => e.currentTarget.style.opacity = 1}
-                        >
+                        <p style={{ color: designTokens.colors.primary[300], fontSize: '0.875rem', opacity: isMobile ? 1 : 0, transition: 'opacity 0.3s' }}>
                           {category.description}
                         </p>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
+                <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+                  <button
+                    onClick={() => setActiveSection('portfolio')}
+                    style={{
+                      ...styles.button,
+                      ...styles.buttonSecondary,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = designTokens.colors.accent[500];
+                      e.currentTarget.style.color = designTokens.colors.accent[500];
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = designTokens.colors.primary[200];
+                      e.currentTarget.style.color = designTokens.colors.primary[900];
+                    }}
+                  >
+                    View All Work
+                    <ArrowRight size={16} />
+                  </button>
+                </div>
               </div>
             </div>
-            
-            {/* Testimonials */}
-            <div style={{ 
-              ...styles.bgGray100, 
-              paddingTop: isMobile ? '2.5rem' : '4rem',
-              paddingBottom: isMobile ? '2.5rem' : '4rem',
+
+            {/* Testimonials Section */}
+            <div style={{
+              paddingTop: isMobile ? '4rem' : '6rem',
+              paddingBottom: isMobile ? '4rem' : '6rem',
+              backgroundColor: designTokens.colors.white,
             }}>
               <div style={styles.container}>
-                <h2 style={{ 
-                  ...styles.text3xl, 
-                  ...styles.textCenter, 
-                  marginBottom: isMobile ? '2rem' : '3rem',
-                  fontSize: isMobile ? '1.5rem' : '1.875rem'
-                }}>
-                  Client <span style={styles.fontBold}>Testimonials</span>
-                </h2>
-                <div style={{ 
-                  ...styles.grid, 
+                <div style={{ textAlign: 'center', marginBottom: isMobile ? '2.5rem' : '3.5rem' }}>
+                  <span style={{
+                    ...styles.badge,
+                    backgroundColor: `${designTokens.colors.accent[500]}15`,
+                    color: designTokens.colors.accent[500],
+                    display: 'inline-block',
+                    marginBottom: '1rem',
+                  }}>
+                    Testimonials
+                  </span>
+                  <h2 style={{
+                    ...styles.text3xl,
+                    ...styles.fontBold,
+                    color: designTokens.colors.primary[900],
+                    marginBottom: '1rem',
+                    fontSize: isMobile ? '1.75rem' : '2.25rem',
+                  }}>
+                    What Clients Say
+                  </h2>
+                </div>
+
+                <div style={{
+                  display: 'grid',
                   gridTemplateColumns: isDesktop ? 'repeat(3, 1fr)' : '1fr',
-                  gap: isMobile ? '1.5rem' : '2rem',
+                  gap: '1.5rem',
                 }}>
                   {testimonials.map((testimonial, index) => (
-                    <div key={index} style={styles.testimonial}>
-                      <p style={{ ...styles.textGray700, fontStyle: 'italic', marginBottom: '1rem' }}>"{testimonial.text}"</p>
-                      <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <div style={{ 
-                          width: '2.5rem', 
-                          height: '2.5rem', 
-                          backgroundColor: '#d1d5db', 
-                          borderRadius: '50%', 
-                          marginRight: '0.75rem' 
-                        }}></div>
+                    <div
+                      key={index}
+                      style={{
+                        ...styles.testimonialCard,
+                        transition: designTokens.transitions.base,
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-4px)';
+                        e.currentTarget.style.boxShadow = designTokens.shadows.xl;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = designTokens.shadows.md;
+                      }}
+                    >
+                      <div style={{ display: 'flex', gap: '0.25rem', marginBottom: '1.25rem' }}>
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star key={i} size={16} fill={designTokens.colors.accent[500]} color={designTokens.colors.accent[500]} />
+                        ))}
+                      </div>
+                      <p style={{ color: designTokens.colors.primary[700], marginBottom: '1.5rem', lineHeight: '1.7', fontSize: '1rem' }}>
+                        "{testimonial.text}"
+                      </p>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{
+                          width: '48px',
+                          height: '48px',
+                          borderRadius: designTokens.borderRadius.full,
+                          background: designTokens.gradients.glow,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: designTokens.colors.white,
+                          fontWeight: 600,
+                          fontSize: '1rem',
+                        }}>
+                          {testimonial.name.split(' ').map((n) => n[0]).join('')}
+                        </div>
                         <div>
-                          <p style={{ ...styles.textGray900, fontWeight: 500 }}>{testimonial.name}</p>
-                          <p style={{ ...styles.textGray500, fontSize: '0.875rem' }}>{testimonial.role}</p>
+                          <p style={{ fontWeight: 600, color: designTokens.colors.primary[900] }}>{testimonial.name}</p>
+                          <p style={{ color: designTokens.colors.primary[500], fontSize: '0.875rem' }}>{testimonial.role}</p>
                         </div>
                       </div>
                     </div>
@@ -718,712 +981,971 @@ const PhotographyWebsite = () => {
             </div>
           </section>
         )}
-        
+
         {/* Portfolio Section */}
         {activeSection === 'portfolio' && (
-          <section style={{ 
-            ...styles.container, 
-            paddingTop: isMobile ? '2.5rem' : '4rem',
-            paddingBottom: isMobile ? '2.5rem' : '4rem',
+          <section style={{
+            paddingTop: isMobile ? '2rem' : '3rem',
+            paddingBottom: isMobile ? '3rem' : '4rem',
+            backgroundColor: designTokens.colors.primary[50],
           }}>
-            <h1 style={{ 
-              ...styles.text4xl, 
-              ...styles.textCenter, 
-              marginBottom: isMobile ? '2rem' : '3rem',
-              fontSize: isMobile ? '2rem' : '2.25rem'
-            }}>
-              My <span style={styles.fontBold}>Portfolio</span>
-            </h1>
-            
-            <div style={{ 
-              display: 'flex', 
-              flexWrap: 'wrap', 
-              justifyContent: 'center', 
-              marginBottom: isMobile ? '1.5rem' : '2rem' 
-            }}>
-              <button style={{ 
-                margin: '0.5rem', 
-                padding: isMobile ? '0.375rem 0.75rem' : '0.5rem 1rem', 
-                backgroundColor: '#111827', 
-                color: 'white', 
-                borderRadius: '0.25rem',
-                fontSize: '0.875rem',
-                border: 'none',
-                cursor: 'pointer',
-              }}>All</button>
-              {portfolioCategories.map(cat => (
-                <button key={cat.id} style={{ 
-                  margin: '0.5rem', 
-                  padding: isMobile ? '0.375rem 0.75rem' : '0.5rem 1rem', 
-                  backgroundColor: '#f3f4f6', 
-                  color: '#111827', 
-                  borderRadius: '0.25rem',
-                  fontSize: '0.875rem',
-                  border: 'none',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.2s',
-                }}
-                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#e5e7eb'}
-                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#f3f4f6'}
-                >
-                  {cat.title}
-                </button>
-              ))}
-            </div>
-            
-            <div style={{ 
-              display: 'grid', 
-              gridTemplateColumns: isMobile 
-                ? '1fr' 
-                : (isTablet 
-                  ? 'repeat(2, 1fr)' 
-                  : (isLargeDesktop 
-                    ? 'repeat(4, 1fr)' 
-                    : 'repeat(3, 1fr)'
-                  )
-                ), 
-              gap: isMobile ? '0.75rem' : '1rem'
-            }}>
-              {galleryImages.map((image, index) => (
-                <div 
-                  key={index} 
-                  style={{ 
-                    position: 'relative', 
-                    overflow: 'hidden', 
+            <div style={styles.container}>
+              <div style={{ textAlign: 'center', marginBottom: isMobile ? '2rem' : '3rem' }}>
+                <span style={{
+                  ...styles.badge,
+                  backgroundColor: `${designTokens.colors.accent[500]}15`,
+                  color: designTokens.colors.accent[500],
+                  display: 'inline-block',
+                  marginBottom: '1rem',
+                }}>
+                  Gallery
+                </span>
+                <h1 style={{
+                  ...styles.text3xl,
+                  ...styles.fontBold,
+                  color: designTokens.colors.primary[900],
+                  marginBottom: '0.75rem',
+                  fontSize: isMobile ? '1.75rem' : '2.5rem',
+                }}>
+                  My Portfolio
+                </h1>
+                <p style={{ color: designTokens.colors.primary[600], maxWidth: '500px', margin: '0 auto' }}>
+                  Explore a collection of my finest work across various photography genres
+                </p>
+              </div>
+
+              {/* Category Filter */}
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                gap: '0.5rem',
+                marginBottom: '2rem',
+              }}>
+                <button
+                  onClick={() => setPortfolioFilter('all')}
+                  style={{
+                    padding: '0.625rem 1.5rem',
+                    borderRadius: designTokens.borderRadius.full,
+                    background: portfolioFilter === 'all' ? designTokens.gradients.glow : designTokens.colors.primary[100],
+                    color: portfolioFilter === 'all' ? designTokens.colors.white : designTokens.colors.primary[600],
+                    border: 'none',
+                    fontWeight: portfolioFilter === 'all' ? 600 : 500,
+                    fontSize: '0.875rem',
                     cursor: 'pointer',
-                    height: isMobile ? '12rem' : '16rem',
+                    transition: designTokens.transitions.base,
                   }}
-                  onClick={() => setCurrentImageIndex(index)}
+                  onMouseEnter={(e) => {
+                    if (portfolioFilter !== 'all') {
+                      e.currentTarget.style.backgroundColor = designTokens.colors.primary[200];
+                      e.currentTarget.style.color = designTokens.colors.primary[800];
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (portfolioFilter !== 'all') {
+                      e.currentTarget.style.backgroundColor = designTokens.colors.primary[100];
+                      e.currentTarget.style.color = designTokens.colors.primary[600];
+                    }
+                  }}
                 >
-                  <img 
-                            src={require('../src/pic.png')} 
-                    alt={image.alt} 
-                    style={styles.objectCover}
-                  />
-                  <div style={{
-                    position: 'absolute',
-                    inset: 0,
-                    backgroundColor: 'black',
-                    opacity: 0,
-                    transition: 'opacity 0.3s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  onMouseOver={(e) => e.currentTarget.style.opacity = 0.5}
-                  onMouseOut={(e) => e.currentTarget.style.opacity = 0}
-                  >
-                    <div style={{
-                      transform: 'translateY(1rem)',
-                      transition: 'transform 0.3s',
+                  All
+                </button>
+                {portfolioCategories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setPortfolioFilter(cat.id)}
+                    style={{
+                      padding: '0.625rem 1.5rem',
+                      borderRadius: designTokens.borderRadius.full,
+                      background: portfolioFilter === cat.id ? designTokens.gradients.glow : designTokens.colors.primary[100],
+                      color: portfolioFilter === cat.id ? designTokens.colors.white : designTokens.colors.primary[600],
+                      border: 'none',
+                      fontWeight: portfolioFilter === cat.id ? 600 : 500,
+                      fontSize: '0.875rem',
+                      cursor: 'pointer',
+                      transition: designTokens.transitions.base,
                     }}
-                    onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(0)'}
-                    >
-                      <p style={{ color: 'white', textAlign: 'center', padding: '0 1rem' }}>{image.alt}</p>
+                    onMouseEnter={(e) => {
+                      if (portfolioFilter !== cat.id) {
+                        e.currentTarget.style.backgroundColor = designTokens.colors.primary[200];
+                        e.currentTarget.style.color = designTokens.colors.primary[800];
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (portfolioFilter !== cat.id) {
+                        e.currentTarget.style.backgroundColor = designTokens.colors.primary[100];
+                        e.currentTarget.style.color = designTokens.colors.primary[600];
+                      }
+                    }}
+                  >
+                    {cat.title}
+                  </button>
+                ))}
+              </div>
+
+              {/* Gallery Grid - Masonry Style */}
+              {(() => {
+                const filteredImages = galleryImages.filter((image) => portfolioFilter === 'all' || image.category === portfolioFilter);
+                return (
+                  <>
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+                      gap: '1.5rem',
+                    }}>
+                      {filteredImages.map((image, index) => (
+                        <div
+                          key={image.src}
+                          style={{
+                            ...styles.portfolioItem,
+                            aspectRatio: index % 3 === 0 ? '3/4' : '4/3',
+                            height: 'auto',
+                          }}
+                          onClick={() => setCurrentImageIndex(index)}
+                          onMouseEnter={(e) => {
+                            const img = e.currentTarget.querySelector('img');
+                            const overlay = e.currentTarget.querySelector('.overlay');
+                            if (img) img.style.transform = 'scale(1.05)';
+                            if (overlay) overlay.style.opacity = '1';
+                          }}
+                          onMouseLeave={(e) => {
+                            const img = e.currentTarget.querySelector('img');
+                            const overlay = e.currentTarget.querySelector('.overlay');
+                            if (img) img.style.transform = 'scale(1)';
+                            if (overlay) overlay.style.opacity = '0';
+                          }}
+                        >
+                          <img
+                            src={image.src}
+                            alt={image.alt}
+                            loading="lazy"
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              objectFit: 'cover',
+                              transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                            }}
+                          />
+                          <div
+                            className="overlay"
+                            style={{
+                              position: 'absolute',
+                              inset: 0,
+                              backgroundColor: 'rgba(15, 23, 42, 0.7)',
+                              backdropFilter: 'blur(2px)',
+                              opacity: 0,
+                              transition: 'opacity 0.3s ease',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            <p style={{ color: designTokens.colors.white, fontWeight: 500, padding: '0 1rem', textAlign: 'center' }}>
+                              {image.alt}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Empty State */}
+                    {filteredImages.length === 0 && (
+                      <div style={{ textAlign: 'center', padding: '4rem 2rem' }}>
+                        <p style={{ color: designTokens.colors.primary[500], fontSize: '1.125rem' }}>
+                          No images found in this category.
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Lightbox - Uses filtered images */}
+                    {currentImageIndex !== null && filteredImages[currentImageIndex] && (
+                      <div
+                        style={styles.lightbox}
+                        onClick={(e) => {
+                          if (e.target === e.currentTarget) setCurrentImageIndex(null);
+                        }}
+                      >
+                        <button
+                          style={{
+                            position: 'absolute',
+                            top: '1.5rem',
+                            right: '1.5rem',
+                            background: 'rgba(255,255,255,0.1)',
+                            border: 'none',
+                            borderRadius: designTokens.borderRadius.full,
+                            padding: '0.75rem',
+                            cursor: 'pointer',
+                            color: designTokens.colors.white,
+                            transition: designTokens.transitions.base,
+                          }}
+                          onClick={() => setCurrentImageIndex(null)}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.2)'}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)'}
+                        >
+                          <X size={24} />
+                        </button>
+
+                        <button
+                          style={{
+                            position: 'absolute',
+                            left: isMobile ? '0.5rem' : '2rem',
+                            background: 'rgba(255,255,255,0.1)',
+                            border: 'none',
+                            borderRadius: designTokens.borderRadius.full,
+                            padding: '1rem',
+                            cursor: 'pointer',
+                            color: designTokens.colors.white,
+                            display: isMobile ? 'none' : 'block',
+                          }}
+                          onClick={() => navigateGallery('prev')}
+                        >
+                          <ChevronLeft size={32} />
+                        </button>
+
+                        <img
+                          src={filteredImages[currentImageIndex].src}
+                          alt={filteredImages[currentImageIndex].alt}
+                          style={{
+                            maxHeight: '85vh',
+                            maxWidth: isMobile ? '95%' : '80%',
+                            borderRadius: designTokens.borderRadius.lg,
+                            objectFit: 'contain',
+                          }}
+                        />
+
+                        <button
+                          style={{
+                            position: 'absolute',
+                            right: isMobile ? '0.5rem' : '2rem',
+                            background: 'rgba(255,255,255,0.1)',
+                            border: 'none',
+                            borderRadius: designTokens.borderRadius.full,
+                            padding: '1rem',
+                            cursor: 'pointer',
+                            color: designTokens.colors.white,
+                            display: isMobile ? 'none' : 'block',
+                          }}
+                          onClick={() => navigateGallery('next')}
+                        >
+                          <ChevronRight size={32} />
+                        </button>
+
+                        <p style={{
+                          position: 'absolute',
+                          bottom: '2rem',
+                          color: designTokens.colors.white,
+                          textAlign: 'center',
+                          fontSize: '1rem',
+                          maxWidth: '600px',
+                          padding: '0 1rem',
+                        }}>
+                          {filteredImages[currentImageIndex].alt}
+                        </p>
+
+                        <p style={{
+                          position: 'absolute',
+                          bottom: '1rem',
+                          color: designTokens.colors.primary[400],
+                          fontSize: '0.75rem',
+                        }}>
+                          {currentImageIndex + 1} / {filteredImages.length}
+                        </p>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
+            </div>
+          </section>
+        )}
+
+        {/* About Section */}
+        {activeSection === 'about' && (
+          <section style={{
+            paddingTop: isMobile ? '2rem' : '3rem',
+            paddingBottom: isMobile ? '3rem' : '4rem',
+            backgroundColor: designTokens.colors.primary[50],
+          }}>
+            <div style={styles.container}>
+              <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+                <div style={{ textAlign: 'center', marginBottom: isMobile ? '2.5rem' : '3.5rem' }}>
+                  <span style={{
+                    ...styles.badge,
+                    backgroundColor: `${designTokens.colors.accent[500]}15`,
+                    color: designTokens.colors.accent[500],
+                    display: 'inline-block',
+                    marginBottom: '1rem',
+                  }}>
+                    About Me
+                  </span>
+                  <h1 style={{
+                    ...styles.text3xl,
+                    ...styles.fontBold,
+                    color: designTokens.colors.primary[900],
+                    marginBottom: '0.75rem',
+                    fontSize: isMobile ? '1.75rem' : '2.5rem',
+                  }}>
+                    The Photographer Behind the Lens
+                  </h1>
+                </div>
+
+                <div style={{
+                  display: 'flex',
+                  flexDirection: isDesktop ? 'row' : 'column',
+                  gap: '3rem',
+                  alignItems: 'center',
+                  marginBottom: '4rem',
+                }}>
+                  <div style={{
+                    flex: 1,
+                    position: 'relative',
+                  }}>
+                    <div style={{
+                      width: isMobile ? '100%' : '400px',
+                      height: isMobile ? '400px' : '500px',
+                      borderRadius: designTokens.borderRadius.lg,
+                      overflow: 'hidden',
+                      boxShadow: designTokens.shadows.xl,
+                    }}>
+                      <img
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80"
+                        alt="Photographer portrait"
+                        loading="lazy"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
+                    </div>
+                    <div style={{
+                      position: 'absolute',
+                      bottom: '-1rem',
+                      right: isDesktop ? '-1rem' : '-0.5rem',
+                      background: designTokens.gradients.glow,
+                      padding: '1.5rem',
+                      borderRadius: designTokens.borderRadius.lg,
+                      color: designTokens.colors.white,
+                      boxShadow: designTokens.shadows.lg,
+                    }}>
+                      <div style={{ ...styles.fontBold, fontSize: '2rem' }}>15+</div>
+                      <div style={{ fontSize: '0.875rem' }}>Years Experience</div>
+                    </div>
+                  </div>
+
+                  <div style={{ flex: 1 }}>
+                    <h2 style={{ ...styles.text2xl, ...styles.fontBold, color: designTokens.colors.primary[900], marginBottom: '1rem' }}>
+                      John Doe
+                    </h2>
+                    <p style={{ color: designTokens.colors.primary[600], marginBottom: '1rem', lineHeight: '1.8' }}>
+                      With over 15 years of experience as a professional photographer, I've had the privilege of working with clients across various industries, from fashion and corporate to weddings and wildlife.
+                    </p>
+                    <p style={{ color: designTokens.colors.primary[600], marginBottom: '1.5rem', lineHeight: '1.8' }}>
+                      My approach combines technical expertise with an artistic vision to capture authentic moments and create compelling visual stories. I believe photography is about preserving emotions and experiences that might otherwise be forgotten.
+                    </p>
+
+                    <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                      {['Portrait', 'Landscape', 'Street', 'Wedding'].map((tag) => (
+                        <span
+                          key={tag}
+                          style={{
+                            padding: '0.5rem 1rem',
+                            backgroundColor: designTokens.colors.white,
+                            borderRadius: designTokens.borderRadius.full,
+                            fontSize: '0.875rem',
+                            color: designTokens.colors.primary[600],
+                            border: `1px solid ${designTokens.colors.primary[200]}`,
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
-            
-            {/* Simple lightbox with touch support */}
-            {currentImageIndex !== null && (
-              <div 
-                style={styles.lightbox}
-                onTouchStart={(e) => {
-                  const touchStartX = e.touches[0].clientX;
-                  e.currentTarget.dataset.touchStartX = touchStartX;
-                }}
-                onTouchEnd={(e) => {
-                  const touchEndX = e.changedTouches[0].clientX;
-                  const touchStartX = parseInt(e.currentTarget.dataset.touchStartX || '0');
-                  const difference = touchEndX - touchStartX;
-                  
-                  // If swipe distance is significant enough (more than 50px)
-                  if (Math.abs(difference) > 50) {
-                    if (difference > 0) {
-                      // Swiped right, go to previous image
-                      navigateGallery('prev');
-                    } else {
-                      // Swiped left, go to next image
-                      navigateGallery('next');
-                    }
-                  }
-                }}
-              >
-                <button 
-                  style={{ 
-                    ...styles.lightboxControls, 
-                    top: isMobile ? '0.5rem' : '1rem', 
-                    right: isMobile ? '0.5rem' : '1rem',
-                  }}
-                  onClick={() => setCurrentImageIndex(null)}
-                >
-                  <X size={isMobile ? 24 : 32} />
-                </button>
-                <button 
-                  style={{ 
-                    ...styles.lightboxControls, 
-                    left: isMobile ? '0.5rem' : '1rem',
-                    display: isMobile ? 'none' : 'block', // Hide on mobile, use swipe instead
-                  }}
-                  onClick={() => navigateGallery('prev')}
-                >
-                  <ChevronLeft size={isMobile ? 32 : 48} />
-                </button>
-                <img 
-                            src={require('../src/pic.png')} 
-                  alt={galleryImages[currentImageIndex].alt} 
-                  style={{ maxHeight: '90vh', maxWidth: '90%' }}
-                />
-                <button 
-                  style={{ 
-                    ...styles.lightboxControls, 
-                    right: isMobile ? '0.5rem' : '1rem',
-                    display: isMobile ? 'none' : 'block', // Hide on mobile, use swipe instead
-                  }}
-                  onClick={() => navigateGallery('next')}
-                >
-                  <ChevronRight size={isMobile ? 32 : 48} />
-                </button>
-                <p style={{ 
-                  position: 'absolute', 
-                  bottom: isMobile ? '0.5rem' : '1rem', 
-                  color: 'white', 
-                  textAlign: 'center', 
-                  width: '100%',
-                  fontSize: isMobile ? '0.875rem' : '1rem',
+
+                {/* Stats */}
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: isDesktop ? 'repeat(4, 1fr)' : isTablet ? 'repeat(2, 1fr)' : '1fr',
+                  gap: '1.5rem',
+                  marginBottom: '4rem',
                 }}>
-                  {galleryImages[currentImageIndex].alt}
-                </p>
-                {isMobile && (
+                  {[
+                    { value: '15+', label: 'Years Experience', description: 'Professional photography' },
+                    { value: '500+', label: 'Happy Clients', description: 'Worldwide' },
+                    { value: '20K+', label: 'Photos Delivered', description: 'High resolution' },
+                    { value: '50+', label: 'Awards Won', description: 'International recognition' },
+                  ].map((stat, idx) => (
+                    <div
+                      key={idx}
+                      style={{
+                        ...styles.card,
+                        padding: '1.5rem',
+                        textAlign: 'center',
+                      }}
+                    >
+                      <div style={styles.statNumber}>{stat.value}</div>
+                      <div style={{ fontWeight: 600, color: designTokens.colors.primary[900], marginTop: '0.5rem' }}>{stat.label}</div>
+                      <div style={{ fontSize: '0.875rem', color: designTokens.colors.primary[500] }}>{stat.description}</div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Equipment */}
+                <div style={{
+                  ...styles.card,
+                  padding: '2rem',
+                }}>
+                  <h3 style={{ ...styles.textXl, ...styles.fontBold, color: designTokens.colors.primary[900], marginBottom: '1.5rem' }}>
+                    My Equipment
+                  </h3>
                   <div style={{
-                    position: 'absolute',
-                    bottom: '3rem',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    color: 'rgba(255, 255, 255, 0.6)',
-                    fontSize: '0.75rem',
+                    display: 'grid',
+                    gridTemplateColumns: isDesktop ? 'repeat(2, 1fr)' : '1fr',
+                    gap: '1rem',
                   }}>
-                    Swipe left or right to navigate
+                    {[
+                      'Canon EOS R5 & Sony Alpha a7R IV Mirrorless Cameras',
+                      'Prime lenses (24mm, 35mm, 50mm, 85mm, 135mm)',
+                      'Professional lighting for studio and location',
+                      'Latest editing software & calibrated displays',
+                    ].map((item, idx) => (
+                      <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          background: designTokens.gradients.glow,
+                        }} />
+                        <span style={{ color: designTokens.colors.primary[700] }}>{item}</span>
+                      </div>
+                    ))}
                   </div>
-                )}
-              </div>
-            )}
-          </section>
-        )}
-        
-        {/* About Section */}
-        {activeSection === 'about' && (
-          <section style={{ 
-            ...styles.container, 
-            paddingTop: isMobile ? '2.5rem' : '4rem',
-            paddingBottom: isMobile ? '2.5rem' : '4rem',
-          }}>
-            <div style={{ maxWidth: '56rem', margin: '0 auto' }}>
-              <h1 style={{ 
-                ...styles.text4xl, 
-                ...styles.textCenter, 
-                marginBottom: isMobile ? '2rem' : '3rem',
-                fontSize: isMobile ? '2rem' : '2.25rem'
-              }}>
-                About <span style={styles.fontBold}>Me</span>
-              </h1>
-              
-              <div style={{ 
-                display: 'flex', 
-                flexDirection: isDesktop ? 'row' : 'column',
-                alignItems: isDesktop ? 'flex-start' : 'center',
-                gap: isMobile ? '1.5rem' : '2rem',
-                marginBottom: isMobile ? '2.5rem' : '4rem'
-              }}>
-                <img 
-                   src={require('../src/pic.png')} 
-                  alt="Photographer portrait" 
-                  style={{ 
-                    width: isMobile ? '12rem' : '16rem', 
-                    height: isMobile ? '15rem' : '20rem', 
-                    objectFit: 'cover' 
-                  }}
-                />
-                <div>
-                  <h2 style={{ fontSize: isMobile ? '1.25rem' : '1.5rem', fontWeight: 500, marginBottom: '1rem' }}>John Doe</h2>
-                  <p style={{ ...styles.textGray700, marginBottom: '1rem', fontSize: isMobile ? '0.938rem' : '1rem' }}>
-                    With over 15 years of experience as a professional photographer, I've had the privilege of
-                    working with clients across various industries, from fashion and corporate to weddings and wildlife.
-                  </p>
-                  <p style={{ ...styles.textGray700, marginBottom: '1rem', fontSize: isMobile ? '0.938rem' : '1rem' }}>
-                    My approach combines technical expertise with an artistic vision to capture authentic moments
-                    and create compelling visual stories. I believe photography is about preserving emotions and
-                    experiences that might otherwise be forgotten.
-                  </p>
-                  <p style={{ ...styles.textGray700, fontSize: isMobile ? '0.938rem' : '1rem' }}>
-                    Based in New York City but available for travel worldwide, I bring passion and dedication to
-                    every project, ensuring each client receives personalized attention and stunning results.
-                  </p>
                 </div>
               </div>
-              
-              <div style={{ 
-                display: 'grid',
-                gridTemplateColumns: isDesktop ? 'repeat(3, 1fr)' : (isTablet ? 'repeat(3, 1fr)' : '1fr'),
-                gap: isMobile ? '1.5rem' : '2rem',
-                marginBottom: isMobile ? '2.5rem' : '4rem'
-              }}>
-                <div style={styles.textCenter}>
-                  <div style={{ fontSize: isMobile ? '1.875rem' : '2.25rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>15+</div>
-                  <p style={{ ...styles.textGray600, fontSize: isMobile ? '0.875rem' : '1rem' }}>Years Experience</p>
-                </div>
-                <div style={styles.textCenter}>
-                  <div style={{ fontSize: isMobile ? '1.875rem' : '2.25rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>500+</div>
-                  <p style={{ ...styles.textGray600, fontSize: isMobile ? '0.875rem' : '1rem' }}>Happy Clients</p>
-                </div>
-                <div style={styles.textCenter}>
-                  <div style={{ fontSize: isMobile ? '1.875rem' : '2.25rem', fontWeight: 700, color: '#111827', marginBottom: '0.5rem' }}>20K+</div>
-                  <p style={{ ...styles.textGray600, fontSize: isMobile ? '0.875rem' : '1rem' }}>Photos Delivered</p>
-                </div>
-              </div>
-              
-              <h2 style={{ fontSize: isMobile ? '1.25rem' : '1.5rem', fontWeight: 500, marginBottom: '1rem' }}>My Equipment</h2>
-              <p style={{ ...styles.textGray700, marginBottom: '1rem', fontSize: isMobile ? '0.938rem' : '1rem' }}>
-                I use professional-grade equipment to ensure the highest quality results:
-              </p>
-              <ul style={{ 
-                listStyleType: 'disc', 
-                paddingLeft: isMobile ? '1.25rem' : '1.5rem', 
-                color: '#374151',
-                marginBottom: '2rem',
-                fontSize: isMobile ? '0.938rem' : '1rem'
-              }}>
-                <li style={{ marginBottom: '0.5rem' }}>Canon EOS R5 & Sony Alpha a7R IV Mirrorless Cameras</li>
-                <li style={{ marginBottom: '0.5rem' }}>Selection of prime lenses (24mm, 35mm, 50mm, 85mm, 135mm)</li>
-                <li style={{ marginBottom: '0.5rem' }}>Professional lighting equipment for studio and on-location shoots</li>
-                <li>Latest editing software and calibrated displays for post-processing</li>
-              </ul>
             </div>
           </section>
         )}
-        
+
         {/* Services Section */}
         {activeSection === 'services' && (
-          <section style={{ 
-            ...styles.container, 
-            paddingTop: isMobile ? '2.5rem' : '4rem',
-            paddingBottom: isMobile ? '2.5rem' : '4rem',
+          <section style={{
+            paddingTop: isMobile ? '2rem' : '3rem',
+            paddingBottom: isMobile ? '3rem' : '4rem',
+            backgroundColor: designTokens.colors.primary[50],
           }}>
-            <h1 style={{ 
-              ...styles.text4xl, 
-              ...styles.textCenter, 
-              marginBottom: isMobile ? '2rem' : '3rem',
-              fontSize: isMobile ? '2rem' : '2.25rem'
-            }}>
-              My <span style={styles.fontBold}>Services</span>
-            </h1>
-            
-            <div style={{ 
-              display: 'grid',
-              gridTemplateColumns: isMobile 
-                ? '1fr' 
-                : (isTablet 
-                  ? 'repeat(2, 1fr)' 
-                  : (isLargeDesktop 
-                    ? 'repeat(3, 1fr)' 
-                    : 'repeat(2, 1fr)'
-                  )
-                ),
-              gap: isMobile ? '1.25rem' : '2rem',
-              maxWidth: '72rem',
-              margin: '0 auto'
-            }}>
-              {[
-                {
-                  title: 'Portrait Photography',
-                  description: 'Professional portraits for individuals, couples, and families that capture personality and emotion in natural or studio settings.',
-                  price: 'Starting at $350'
-                },
-                {
-                  title: 'Wedding Photography',
-                  description: 'Comprehensive wedding day coverage with a blend of candid moments and artistic portraits to tell your complete love story.',
-                  price: 'Starting at $2,500'
-                },
-                {
-                  title: 'Commercial Photography',
-                  description: 'High-quality product and brand imagery for businesses looking to elevate their marketing materials and online presence.',
-                  price: 'Starting at $800'
-                },
-                {
-                  title: 'Event Coverage',
-                  description: 'Documentary-style photography for corporate events, conferences, parties, and other special occasions.',
-                  price: 'Starting at $500'
-                },
-                {
-                  title: 'Fine Art Photography',
-                  description: 'Limited edition artistic prints for homes, offices, and galleries, focusing on landscapes, abstract, and conceptual work.',
-                  price: 'Starting at $250'
-                },
-                {
-                  title: 'Photo Editing & Retouching',
-                  description: 'Professional editing and retouching services to enhance existing photographs or restore old family photos.',
-                  price: 'Starting at $75/hr'
-                }
-              ].map((service, index) => (
-                <div key={index} style={{ 
-                  ...styles.bgWhite, 
-                  ...styles.p6, 
-                  ...(isMobile ? { padding: '1.25rem' } : {}),
-                  ...styles.shadow, 
-                  ...styles.borderGray100 
+            <div style={styles.container}>
+              <div style={{ textAlign: 'center', marginBottom: isMobile ? '2.5rem' : '3.5rem' }}>
+                <span style={{
+                  ...styles.badge,
+                  backgroundColor: `${designTokens.colors.accent[500]}15`,
+                  color: designTokens.colors.accent[500],
+                  display: 'inline-block',
+                  marginBottom: '1rem',
                 }}>
-                  <div style={{ 
-                    width: isMobile ? '2.5rem' : '3rem', 
-                    height: isMobile ? '2.5rem' : '3rem', 
-                    backgroundColor: '#111827', 
-                    borderRadius: '50%', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center',
-                    marginBottom: '1rem'
-                  }}>
-                    <Camera style={{ color: 'white', width: isMobile ? '1.25rem' : '1.5rem', height: isMobile ? '1.25rem' : '1.5rem' }} />
-                  </div>
-                  <h3 style={{ fontSize: isMobile ? '1.125rem' : '1.25rem', fontWeight: 500, marginBottom: '0.5rem' }}>{service.title}</h3>
-                  <p style={{ ...styles.textGray600, marginBottom: '1rem', fontSize: isMobile ? '0.875rem' : '1rem' }}>{service.description}</p>
-                  <p style={{ ...styles.textGray900, fontWeight: 500, fontSize: isMobile ? '0.938rem' : '1rem' }}>{service.price}</p>
-                </div>
-              ))}
-            </div>
-            
-            <div style={{ 
-              maxWidth: '56rem', 
-              margin: '4rem auto 0', 
-              ...styles.bgGray100, 
-              padding: isMobile ? '1.5rem' : '2rem'
-            }}>
-              <h2 style={{ 
-                fontSize: isMobile ? '1.25rem' : '1.5rem', 
-                fontWeight: 500, 
-                textAlign: 'center', 
-                marginBottom: isMobile ? '1.25rem' : '1.5rem' 
-              }}>
-                The Process
-              </h2>
-              <div style={{ 
+                  Services
+                </span>
+                <h1 style={{
+                  ...styles.text3xl,
+                  ...styles.fontBold,
+                  color: designTokens.colors.primary[900],
+                  marginBottom: '0.75rem',
+                  fontSize: isMobile ? '1.75rem' : '2.5rem',
+                }}>
+                  What I Offer
+                </h1>
+                <p style={{ color: designTokens.colors.primary[600], maxWidth: '500px', margin: '0 auto' }}>
+                  Professional photography services tailored to your unique needs
+                </p>
+              </div>
+
+              {/* Services Grid */}
+              <div style={{
                 display: 'grid',
-                gridTemplateColumns: isDesktop ? 'repeat(3, 1fr)' : (isTablet ? 'repeat(3, 1fr)' : '1fr'),
-                gap: isMobile ? '1.5rem' : '2rem'
+                gridTemplateColumns: isMobile ? '1fr' : isTablet ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+                gap: '1.5rem',
+                marginBottom: '4rem',
               }}>
-                {[
-                  {
-                    step: '01',
-                    title: 'Consultation',
-                    description: 'We discuss your vision, requirements, and expectations to plan the perfect photoshoot.'
-                  },
-                  {
-                    step: '02',
-                    title: 'Photography Session',
-                    description: 'Professional photography session at the agreed location with state-of-the-art equipment.'
-                  },
-                  {
-                    step: '03',
-                    title: 'Editing & Delivery',
-                    description: 'Careful selection and professional editing of the best images, delivered in your preferred format.'
-                  }
-                ].map((process, index) => (
-                  <div key={index} style={styles.textCenter}>
-                    <div style={{ fontSize: isMobile ? '1.25rem' : '1.5rem', fontWeight: 700, color: '#d1d5db', marginBottom: '0.5rem' }}>{process.step}</div>
-                    <h3 style={{ fontSize: isMobile ? '1.125rem' : '1.25rem', fontWeight: 500, marginBottom: '0.5rem' }}>{process.title}</h3>
-                    <p style={{ ...styles.textGray600, fontSize: isMobile ? '0.875rem' : '1rem' }}>{process.description}</p>
+                {services.map((service, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      ...styles.serviceCard,
+                      ...(hoveredService === index ? { boxShadow: designTokens.shadows.xl } : {}),
+                    }}
+                    onMouseEnter={() => setHoveredService(index)}
+                    onMouseLeave={() => setHoveredService(null)}
+                  >
+                    <div style={{
+                      width: '56px',
+                      height: '56px',
+                      borderRadius: designTokens.borderRadius.md,
+                      background: designTokens.gradients.glow,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginBottom: '1.25rem',
+                    }}>
+                      <service.icon style={{ color: designTokens.colors.white, width: '28px', height: '28px' }} />
+                    </div>
+                    <h3 style={{ ...styles.textLg, ...styles.fontSemibold, color: designTokens.colors.primary[900], marginBottom: '0.75rem' }}>
+                      {service.title}
+                    </h3>
+                    <p style={{ color: designTokens.colors.primary[600], marginBottom: '1rem', lineHeight: '1.6', fontSize: '0.9375rem' }}>
+                      {service.description}
+                    </p>
+                    <ul style={{ marginBottom: '1.25rem', padding: 0, listStyle: 'none' }}>
+                      {service.features.map((feature, i) => (
+                        <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: designTokens.colors.primary[500], fontSize: '0.875rem', marginBottom: '0.375rem' }}>
+                          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: designTokens.colors.accent[500] }} />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
+                      <span style={{ ...styles.fontSemibold, color: designTokens.colors.primary[900], fontSize: '1.125rem' }}>
+                        {service.price}
+                      </span>
+                      <button
+                        onClick={() => setActiveSection('contact')}
+                        style={{
+                          padding: '0.5rem 1rem',
+                          borderRadius: designTokens.borderRadius.full,
+                          backgroundColor: `${designTokens.colors.accent[500]}10`,
+                          color: designTokens.colors.accent[500],
+                          border: 'none',
+                          fontSize: '0.875rem',
+                          fontWeight: 500,
+                          cursor: 'pointer',
+                          transition: designTokens.transitions.base,
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = designTokens.colors.accent[500];
+                          e.currentTarget.style.color = designTokens.colors.white;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = `${designTokens.colors.accent[500]}10`;
+                          e.currentTarget.style.color = designTokens.colors.accent[500];
+                        }}
+                      >
+                        Book Now
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
+
+              {/* Process Section */}
+              <div style={{
+                ...styles.card,
+                padding: isMobile ? '1.5rem' : '2.5rem',
+                background: designTokens.gradients.hero,
+              }}>
+                <h2 style={{
+                  ...styles.textXl,
+                  ...styles.fontBold,
+                  color: designTokens.colors.white,
+                  textAlign: 'center',
+                  marginBottom: '2rem',
+                }}>
+                  The Process
+                </h2>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: isDesktop ? 'repeat(3, 1fr)' : '1fr',
+                  gap: '2rem',
+                }}>
+                  {[
+                    { step: '01', title: 'Consultation', description: 'We discuss your vision, requirements, and expectations to plan the perfect photoshoot.' },
+                    { step: '02', title: 'Photography Session', description: 'Professional photography session at the agreed location with state-of-the-art equipment.' },
+                    { step: '03', title: 'Editing & Delivery', description: 'Careful selection and professional editing of the best images, delivered in your preferred format.' },
+                  ].map((process, index) => (
+                    <div key={index} style={{ textAlign: 'center' }}>
+                      <div style={{
+                        width: '64px',
+                        height: '64px',
+                        borderRadius: designTokens.borderRadius.full,
+                        backgroundColor: 'rgba(255,255,255,0.1)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0 auto 1rem',
+                        border: '1px solid rgba(255,255,255,0.2)',
+                      }}>
+                        <span style={{ color: designTokens.colors.accent[400], fontSize: '1.25rem', fontWeight: 700 }}>{process.step}</span>
+                      </div>
+                      <h3 style={{ color: designTokens.colors.white, fontSize: '1.125rem', fontWeight: 600, marginBottom: '0.5rem' }}>
+                        {process.title}
+                      </h3>
+                      <p style={{ color: designTokens.colors.primary[300], fontSize: '0.9375rem', lineHeight: '1.6' }}>
+                        {process.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
         )}
-        
+
         {/* Contact Section */}
         {activeSection === 'contact' && (
-          <section style={{ 
-            ...styles.container, 
-            paddingTop: isMobile ? '2.5rem' : '4rem',
-            paddingBottom: isMobile ? '2.5rem' : '4rem',
+          <section style={{
+            paddingTop: isMobile ? '2rem' : '3rem',
+            paddingBottom: isMobile ? '3rem' : '4rem',
+            backgroundColor: designTokens.colors.primary[50],
           }}>
-            <h1 style={{ 
-              ...styles.text4xl, 
-              ...styles.textCenter, 
-              marginBottom: isMobile ? '2rem' : '3rem',
-              fontSize: isMobile ? '2rem' : '2.25rem'
-            }}>
-              Get In <span style={styles.fontBold}>Touch</span>
-            </h1>
-            
-            <div style={{ 
-              maxWidth: '56rem', 
-              margin: '0 auto',
-              display: 'grid',
-              gridTemplateColumns: isDesktop ? 'repeat(2, 1fr)' : '1fr',
-              gap: isMobile ? '3rem' : '2rem'
-            }}>
-              <div>
-                <h2 style={{ fontSize: isMobile ? '1.25rem' : '1.5rem', fontWeight: 500, marginBottom: '1rem' }}>Contact Information</h2>
-                <p style={{ 
-                  ...styles.textGray600, 
-                  marginBottom: '1.5rem',
-                  fontSize: isMobile ? '0.938rem' : '1rem'
+            <div style={styles.container}>
+              <div style={{ textAlign: 'center', marginBottom: isMobile ? '2.5rem' : '3.5rem' }}>
+                <span style={{
+                  ...styles.badge,
+                  backgroundColor: `${designTokens.colors.accent[500]}15`,
+                  color: designTokens.colors.accent[500],
+                  display: 'inline-block',
+                  marginBottom: '1rem',
                 }}>
-                  Have a project in mind or want to discuss a potential collaboration? Reach out through the form or using the contact details below.
+                  Contact
+                </span>
+                <h1 style={{
+                  ...styles.text3xl,
+                  ...styles.fontBold,
+                  color: designTokens.colors.primary[900],
+                  marginBottom: '0.75rem',
+                  fontSize: isMobile ? '1.75rem' : '2.5rem',
+                }}>
+                  Get In Touch
+                </h1>
+                <p style={{ color: designTokens.colors.primary[600], maxWidth: '500px', margin: '0 auto' }}>
+                  Have a project in mind? Let's create something beautiful together.
                 </p>
-                
-                <div style={{ marginBottom: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <div>
-                    <p style={{ fontWeight: 500, fontSize: isMobile ? '0.938rem' : '1rem' }}>Email</p>
-                    <p style={{ ...styles.textGray600, fontSize: isMobile ? '0.938rem' : '1rem' }}>contact@lenscraftphotography.com</p>
-                  </div>
-                  <div>
-                    <p style={{ fontWeight: 500, fontSize: isMobile ? '0.938rem' : '1rem' }}>Phone</p>
-                    <p style={{ ...styles.textGray600, fontSize: isMobile ? '0.938rem' : '1rem' }}>+1 (555) 123-4567</p>
-                  </div>
-                  <div>
-                    <p style={{ fontWeight: 500, fontSize: isMobile ? '0.938rem' : '1rem' }}>Studio Address</p>
-                    <p style={{ ...styles.textGray600, fontSize: isMobile ? '0.938rem' : '1rem' }}>123 Creative Lane, Suite 400<br />New York, NY 10001</p>
-                  </div>
-                </div>
-                
-                <h3 style={{ fontSize: isMobile ? '1.125rem' : '1.25rem', fontWeight: 500, marginBottom: '0.75rem' }}>Business Hours</h3>
-                <div style={{ 
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '0.5rem',
-                  color: '#4b5563',
-                  fontSize: isMobile ? '0.938rem' : '1rem'
-                }}>
-                  <div>Monday - Friday</div>
-                  <div>9:00 AM - 6:00 PM</div>
-                  <div>Saturday</div>
-                  <div>10:00 AM - 4:00 PM</div>
-                  <div>Sunday</div>
-                  <div>Closed</div>
-                </div>
               </div>
-              
-              <div>
-                <h2 style={{ fontSize: isMobile ? '1.25rem' : '1.5rem', fontWeight: 500, marginBottom: '1rem' }}>Send a Message</h2>
-                <form style={styles.form}>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label 
-                      htmlFor="name" 
-                      style={{ 
-                        display: 'block', 
-                        color: '#374151', 
-                        marginBottom: '0.25rem',
-                        fontSize: isMobile ? '0.938rem' : '1rem'
+
+              <div style={{
+                maxWidth: '1000px',
+                margin: '0 auto',
+                display: 'grid',
+                gridTemplateColumns: isDesktop ? '5fr 7fr' : '1fr',
+                gap: '2rem',
+              }}>
+                {/* Contact Info */}
+                <div>
+                  <div style={{ ...styles.card, padding: '1.5rem', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                      <div style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: designTokens.borderRadius.md,
+                        background: `${designTokens.colors.accent[500]}15`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}>
+                        <Mail size={20} color={designTokens.colors.accent[500]} />
+                      </div>
+                      <div>
+                        <h4 style={{ fontWeight: 600, color: designTokens.colors.primary[900], marginBottom: '0.25rem' }}>Email</h4>
+                        <p style={{ color: designTokens.colors.primary[600], fontSize: '0.9375rem' }}>contact@lenscraft.studio</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ ...styles.card, padding: '1.5rem', marginBottom: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                      <div style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: designTokens.borderRadius.md,
+                        background: `${designTokens.colors.accent[500]}15`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}>
+                        <Phone size={20} color={designTokens.colors.accent[500]} />
+                      </div>
+                      <div>
+                        <h4 style={{ fontWeight: 600, color: designTokens.colors.primary[900], marginBottom: '0.25rem' }}>Phone</h4>
+                        <p style={{ color: designTokens.colors.primary[600], fontSize: '0.9375rem' }}>+1 (555) 123-4567</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ ...styles.card, padding: '1.5rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+                      <div style={{
+                        width: '44px',
+                        height: '44px',
+                        borderRadius: designTokens.borderRadius.md,
+                        background: `${designTokens.colors.accent[500]}15`,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                      }}>
+                        <MapPin size={20} color={designTokens.colors.accent[500]} />
+                      </div>
+                      <div>
+                        <h4 style={{ fontWeight: 600, color: designTokens.colors.primary[900], marginBottom: '0.25rem' }}>Studio</h4>
+                        <p style={{ color: designTokens.colors.primary[600], fontSize: '0.9375rem' }}>
+                          123 Creative Lane, Suite 400<br />New York, NY 10001
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Business Hours */}
+                  <div style={{ ...styles.card, padding: '1.5rem', marginTop: '1rem' }}>
+                    <h4 style={{ fontWeight: 600, color: designTokens.colors.primary[900], marginBottom: '1rem' }}>Business Hours</h4>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', fontSize: '0.9375rem' }}>
+                      <span style={{ color: designTokens.colors.primary[600] }}>Mon - Fri</span>
+                      <span style={{ color: designTokens.colors.primary[900] }}>9:00 AM - 6:00 PM</span>
+                      <span style={{ color: designTokens.colors.primary[600] }}>Saturday</span>
+                      <span style={{ color: designTokens.colors.primary[900] }}>10:00 AM - 4:00 PM</span>
+                      <span style={{ color: designTokens.colors.primary[600] }}>Sunday</span>
+                      <span style={{ color: designTokens.colors.primary[400] }}>Closed</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Contact Form */}
+                <div style={{ ...styles.card, padding: isMobile ? '1.5rem' : '2rem' }}>
+                  <h3 style={{ ...styles.textXl, ...styles.fontBold, color: designTokens.colors.primary[900], marginBottom: '1.5rem' }}>
+                    Send a Message
+                  </h3>
+                  <form>
+                    <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: designTokens.colors.primary[700], marginBottom: '0.5rem' }}>
+                          Name
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Your name"
+                          style={styles.formInput}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = designTokens.colors.accent[500];
+                            e.target.style.boxShadow = `0 0 0 3px ${designTokens.colors.accent[500]}20`;
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = designTokens.colors.primary[200];
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: designTokens.colors.primary[700], marginBottom: '0.5rem' }}>
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          placeholder="your@email.com"
+                          style={styles.formInput}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = designTokens.colors.accent[500];
+                            e.target.style.boxShadow = `0 0 0 3px ${designTokens.colors.accent[500]}20`;
+                          }}
+                          onBlur={(e) => {
+                            e.target.style.borderColor = designTokens.colors.primary[200];
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: '1rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: designTokens.colors.primary[700], marginBottom: '0.5rem' }}>
+                        Subject
+                      </label>
+                      <input
+                        type="text"
+                        placeholder="What is this about?"
+                        style={styles.formInput}
+                        onFocus={(e) => {
+                          e.target.style.borderColor = designTokens.colors.accent[500];
+                          e.target.style.boxShadow = `0 0 0 3px ${designTokens.colors.accent[500]}20`;
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = designTokens.colors.primary[200];
+                          e.target.style.boxShadow = 'none';
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: '1.5rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 500, color: designTokens.colors.primary[700], marginBottom: '0.5rem' }}>
+                        Message
+                      </label>
+                      <textarea
+                        rows={5}
+                        placeholder="Tell me about your project..."
+                        style={{ ...styles.formInput, resize: 'vertical', minHeight: '120px' }}
+                        onFocus={(e) => {
+                          e.target.style.borderColor = designTokens.colors.accent[500];
+                          e.target.style.boxShadow = `0 0 0 3px ${designTokens.colors.accent[500]}20`;
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = designTokens.colors.primary[200];
+                          e.target.style.boxShadow = 'none';
+                        }}
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      style={{
+                        ...styles.button,
+                        ...styles.buttonPrimary,
+                        width: '100%',
+                        justifyContent: 'center',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = designTokens.shadows.glow;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = designTokens.shadows.md;
                       }}
                     >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      style={{
-                        ...styles.formInput,
-                        fontSize: isMobile ? '16px' : 'inherit', // Prevents zoom on iOS
-                      }}
-                      placeholder="Your name"
-                    />
-                  </div>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label 
-                      htmlFor="email" 
-                      style={{ 
-                        display: 'block', 
-                        color: '#374151', 
-                        marginBottom: '0.25rem',
-                        fontSize: isMobile ? '0.938rem' : '1rem'
-                      }}
-                    >
-                      Email
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      style={{
-                        ...styles.formInput,
-                        fontSize: isMobile ? '16px' : 'inherit', // Prevents zoom on iOS
-                      }}
-                      placeholder="Your email"
-                    />
-                  </div>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label 
-                      htmlFor="subject" 
-                      style={{ 
-                        display: 'block', 
-                        color: '#374151', 
-                        marginBottom: '0.25rem',
-                        fontSize: isMobile ? '0.938rem' : '1rem'
-                      }}
-                    >
-                      Subject
-                    </label>
-                    <input
-                      type="text"
-                      id="subject"
-                      style={{
-                        ...styles.formInput,
-                        fontSize: isMobile ? '16px' : 'inherit', // Prevents zoom on iOS
-                      }}
-                      placeholder="Subject"
-                    />
-                  </div>
-                  <div style={{ marginBottom: '1rem' }}>
-                    <label 
-                      htmlFor="message" 
-                      style={{ 
-                        display: 'block', 
-                        color: '#374151', 
-                        marginBottom: '0.25rem',
-                        fontSize: isMobile ? '0.938rem' : '1rem'
-                      }}
-                    >
-                      Message
-                    </label>
-                    <textarea
-                      id="message"
-                      rows={isMobile ? "4" : "5"}
-                      style={{
-                        ...styles.formInput,
-                        fontSize: isMobile ? '16px' : 'inherit', // Prevents zoom on iOS
-                      }}
-                      placeholder="Your message"
-                    ></textarea>
-                  </div>
-                  <button
-                    type="submit"
-                    style={{
-                      backgroundColor: '#111827',
-                      color: 'white',
-                      padding: isMobile ? '0.625rem 1.25rem' : '0.75rem 1.5rem',
-                      fontWeight: 500,
-                      border: 'none',
-                      cursor: 'pointer',
-                      transition: 'background-color 0.3s',
-                      borderRadius: '0.25rem',
-                      fontSize: isMobile ? '0.938rem' : '1rem'
-                    }}
-                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1f2937'}
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#111827'}
-                  >
-                    Send Message
-                  </button>
-                </form>
+                      Send Message
+                      <ArrowRight size={18} />
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           </section>
         )}
       </main>
-      
-      {/* Footer */}
-      <footer style={{
-        ...styles.footer,
-        padding: isMobile ? '2rem 0' : '3rem 0',
-      }}>
+
+      {/* Modern Footer */}
+      <footer style={styles.footer}>
         <div style={styles.container}>
-          <div style={{ 
-            display: 'flex', 
+          <div style={{
+            display: 'flex',
+            flexDirection: isDesktop ? 'row' : 'column',
+            justifyContent: 'space-between',
+            alignItems: isDesktop ? 'flex-start' : 'center',
+            gap: '2rem',
+            marginBottom: '2rem',
+          }}>
+            {/* Logo & Description */}
+            <div style={{ maxWidth: '300px', textAlign: isDesktop ? 'left' : 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', justifyContent: isDesktop ? 'flex-start' : 'center' }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: designTokens.borderRadius.md,
+                  background: designTokens.gradients.glow,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <Camera style={{ width: '22px', height: '22px', color: designTokens.colors.white }} />
+                </div>
+                <span style={{ fontSize: '1.25rem', fontWeight: 600, color: designTokens.colors.white }}>
+                  Lens<span style={{ color: designTokens.colors.accent[400] }}>Craft</span>
+                </span>
+              </div>
+              <p style={{ color: designTokens.colors.primary[400], fontSize: '0.875rem', lineHeight: '1.6' }}>
+                Professional photography services capturing life's most precious moments with artistic excellence.
+              </p>
+            </div>
+
+            {/* Quick Links */}
+            <div style={{ display: 'flex', gap: '3rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+              <div>
+                <h4 style={{ color: designTokens.colors.white, fontWeight: 600, marginBottom: '1rem', fontSize: '0.875rem' }}>Quick Links</h4>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {['Home', 'Portfolio', 'About', 'Services'].map((link) => (
+                    <li key={link} style={{ marginBottom: '0.5rem' }}>
+                      <button
+                        onClick={() => setActiveSection(link.toLowerCase())}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: designTokens.colors.primary[400],
+                          fontSize: '0.875rem',
+                          cursor: 'pointer',
+                          transition: designTokens.transitions.base,
+                          padding: 0,
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = designTokens.colors.white}
+                        onMouseLeave={(e) => e.currentTarget.style.color = designTokens.colors.primary[400]}
+                      >
+                        {link}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <h4 style={{ color: designTokens.colors.white, fontWeight: 600, marginBottom: '1rem', fontSize: '0.875rem' }}>Services</h4>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                  {['Portraits', 'Weddings', 'Commercial', 'Events'].map((service) => (
+                    <li key={service} style={{ marginBottom: '0.5rem', color: designTokens.colors.primary[400], fontSize: '0.875rem' }}>
+                      {service}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Social Links */}
+            <div style={{ textAlign: isDesktop ? 'right' : 'center' }}>
+              <h4 style={{ color: designTokens.colors.white, fontWeight: 600, marginBottom: '1rem', fontSize: '0.875rem' }}>Follow Me</h4>
+              <div style={{ display: 'flex', gap: '0.75rem', justifyContent: isDesktop ? 'flex-end' : 'center' }}>
+                {[Instagram, Facebook, Twitter].map((Icon, i) => (
+                  <button
+                    key={i}
+                    style={{
+                      width: '40px',
+                      height: '40px',
+                      borderRadius: designTokens.borderRadius.full,
+                      backgroundColor: 'rgba(255,255,255,0.1)',
+                      border: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      transition: designTokens.transitions.base,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = designTokens.colors.accent[500];
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.1)';
+                    }}
+                  >
+                    <Icon size={18} color={designTokens.colors.white} />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            borderTop: `1px solid ${designTokens.colors.primary[800]}`,
+            paddingTop: '1.5rem',
+            display: 'flex',
             flexDirection: isDesktop ? 'row' : 'column',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: isMobile ? '1.5rem' : '2rem'
+            gap: '1rem',
           }}>
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.5rem',
-              marginBottom: isDesktop ? 0 : '1rem'
-            }}>
-              <Camera style={{ width: '2rem', height: '2rem', color: 'white' }} />
-              <span style={{ ...styles.text2xl, color: 'white' }}>
-                LENS<span style={styles.fontBold}>CRAFT</span>
-              </span>
-            </div>
-            
-            <div style={{ 
-              display: 'flex', 
-              gap: isMobile ? '0.75rem' : '1rem',
-              flexWrap: 'wrap',
-              justifyContent: 'center'
-            }}>
-              {['Facebook', 'Instagram', 'Twitter', 'Pinterest'].map(social => (
-                <a 
-                  key={social} 
-                  href="#" 
-                  style={{ 
-                    ...styles.footerLink,
-                    fontSize: isMobile ? '0.875rem' : '1rem'
-                  }}
-                  onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                  onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}
+            <p style={{ color: designTokens.colors.primary[500], fontSize: '0.875rem' }}>
+              © {new Date().getFullYear()} LensCraft Photography. All rights reserved.
+            </p>
+            <div style={{ display: 'flex', gap: '1.5rem' }}>
+              {['Privacy Policy', 'Terms of Service'].map((link) => (
+                <a
+                  key={link}
+                  href="#"
+                  style={{ color: designTokens.colors.primary[500], fontSize: '0.875rem', textDecoration: 'none', transition: designTokens.transitions.base }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = designTokens.colors.white}
+                  onMouseLeave={(e) => e.currentTarget.style.color = designTokens.colors.primary[500]}
                 >
-                  {social}
+                  {link}
                 </a>
               ))}
-            </div>
-          </div>
-          
-          <hr style={{ borderColor: '#1f2937', marginBottom: isMobile ? '1.5rem' : '2rem' }} />
-          
-          <div style={{ 
-            display: 'flex', 
-            flexDirection: isDesktop ? 'row' : 'column',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
-            <p style={{ 
-              color: '#9ca3af',
-              marginBottom: isDesktop ? 0 : '1rem',
-              fontSize: isMobile ? '0.875rem' : '1rem',
-              textAlign: isMobile ? 'center' : 'left'
-            }}>
-              © {new Date().getFullYear()} LENSCRAFT Photography. All rights reserved.
-            </p>
-            <div style={{ 
-              display: 'flex', 
-              gap: isMobile ? '1rem' : '1.5rem',
-              flexWrap: isMobile ? 'wrap' : 'nowrap',
-              justifyContent: 'center'
-            }}>
-              <a 
-                href="#" 
-                style={{ 
-                  ...styles.footerLink,
-                  fontSize: '0.875rem'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}
-              >
-                Privacy Policy
-              </a>
-              <a 
-                href="#" 
-                style={{ 
-                  ...styles.footerLink,
-                  fontSize: '0.875rem'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}
-              >
-                Terms of Service
-              </a>
-              <a 
-                href="#" 
-                style={{ 
-                  ...styles.footerLink,
-                  fontSize: '0.875rem'
-                }}
-                onMouseOver={(e) => e.currentTarget.style.color = 'white'}
-                onMouseOut={(e) => e.currentTarget.style.color = '#9ca3af'}
-              >
-                Sitemap
-              </a>
             </div>
           </div>
         </div>
