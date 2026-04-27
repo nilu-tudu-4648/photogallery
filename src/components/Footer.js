@@ -2,7 +2,6 @@ import React from 'react';
 import { Camera, Instagram, Facebook, Twitter } from 'lucide-react';
 import { styles } from '../styles/styles';
 import { designTokens } from '../styles/designTokens';
-import { navItems } from '../data/data';
 
 export const Footer = ({ isMobile, isDesktop, setActiveSection }) => {
   const quickLinks = ['Home', 'Portfolio', 'About', 'Services'];

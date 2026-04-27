@@ -24,12 +24,9 @@ const PhotographyWebsite = () => {
   const isTablet = useMediaQuery('(min-width: 640px) and (max-width: 767px)');
   const isDesktop = useMediaQuery('(min-width: 768px)');
 
-  const getFilteredImages = () =>
-    galleryImages.filter((image) => portfolioFilter === 'all' || image.category === portfolioFilter);
-
   const navigateGallery = useCallback(
     (direction) => {
-      const filtered = getFilteredImages();
+      const filtered = galleryImages.filter((image) => portfolioFilter === 'all' || image.category === portfolioFilter);
       if (direction === 'next') {
         setCurrentImageIndex((prev) => (prev === filtered.length - 1 ? 0 : prev + 1));
       } else {
